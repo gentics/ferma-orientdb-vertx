@@ -15,7 +15,7 @@ This extension provides various wrappers and abstract classes that are very usef
 
 ## Vert.x Integration
 
-Similar to ```Vertx.executeBlocking``` the methods ```asyncNoTrx``` and ```asyncTrx`` can be used in combination with vertx. 
+Similar to ```Vertx.executeBlocking``` the methods ```asyncNoTrx``` and ```asyncTrx``` can be used in combination with vertx. 
 The given handler will be executed within a transaction and a dedicated worker pool thread. 
 Please note that the transaction handler may be executed multiple times in order to retry the transaction code when an OConcurrentModificationException occurred. 
 
