@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import de.jotschi.ferma.impl.OrientDBTrxFactory;
 import de.jotschi.ferma.model.Person;
+import de.jotschi.ferma.orientdb.OrientDBTrxFactory;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;

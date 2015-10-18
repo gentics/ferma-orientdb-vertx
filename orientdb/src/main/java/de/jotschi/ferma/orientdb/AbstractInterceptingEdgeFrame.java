@@ -1,4 +1,4 @@
-package de.jotschi.ferma;
+package de.jotschi.ferma.orientdb;
 
 
 import com.syncleus.ferma.AbstractEdgeFrame;
@@ -9,8 +9,6 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.util.wrappers.wrapped.WrappedEdge;
 import com.tinkerpop.blueprints.util.wrappers.wrapped.WrappedElement;
-
-import de.jotschi.ferma.impl.OrientDBTrxFactory;
 
 public class AbstractInterceptingEdgeFrame extends AbstractEdgeFrame {
 

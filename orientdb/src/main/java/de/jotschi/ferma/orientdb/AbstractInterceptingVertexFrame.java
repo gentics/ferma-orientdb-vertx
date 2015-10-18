@@ -1,4 +1,4 @@
-package de.jotschi.ferma;
+package de.jotschi.ferma.orientdb;
 
 
 import java.util.HashMap;
@@ -13,8 +13,6 @@ import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.util.wrappers.wrapped.WrappedElement;
 import com.tinkerpop.blueprints.util.wrappers.wrapped.WrappedVertex;
-
-import de.jotschi.ferma.impl.OrientDBTrxFactory;
 
 public class AbstractInterceptingVertexFrame extends AbstractVertexFrame {
 

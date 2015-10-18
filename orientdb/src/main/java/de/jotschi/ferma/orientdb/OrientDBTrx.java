@@ -1,11 +1,10 @@
-package de.jotschi.ferma.impl;
+package de.jotschi.ferma.orientdb;
 
 import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
 import com.syncleus.ferma.FramedTransactionalGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
 import de.jotschi.ferma.AbstractTrx;
-import de.jotschi.ferma.orientdb.DelegatingFramedTransactionalOrientGraph;
 
 public class OrientDBTrx extends AbstractTrx {
 

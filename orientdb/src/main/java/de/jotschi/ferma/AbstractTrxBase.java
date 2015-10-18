@@ -2,7 +2,7 @@ package de.jotschi.ferma;
 
 import com.syncleus.ferma.FramedGraph;
 
-import de.jotschi.ferma.impl.OrientDBTrxFactory;
+import de.jotschi.ferma.orientdb.OrientDBTrxFactory;
 
 /**
  * An abstract base class that can be used to implement database specific Trx and NoTrx classes.

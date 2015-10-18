@@ -2,7 +2,7 @@ package de.jotschi.ferma.model;
 
 import java.util.List;
 
-import de.jotschi.ferma.AbstractInterceptingVertexFrame;
+import de.jotschi.ferma.orientdb.AbstractInterceptingVertexFrame;
 
 public class Group extends AbstractInterceptingVertexFrame {
 

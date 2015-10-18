@@ -1,10 +1,9 @@
-package de.jotschi.ferma.impl;
+package de.jotschi.ferma.orientdb;
 
 import com.syncleus.ferma.FramedGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
 import de.jotschi.ferma.AbstractNoTrx;
-import de.jotschi.ferma.orientdb.DelegatingFramedOrientGraph;
 
 public class OrientDBNoTrx extends AbstractNoTrx implements AutoCloseable {
 

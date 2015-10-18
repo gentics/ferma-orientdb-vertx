@@ -16,8 +16,8 @@ import org.junit.Test;
 
 import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
 
-import de.jotschi.ferma.impl.OrientDBTrxFactory;
 import de.jotschi.ferma.model.Person;
+import de.jotschi.ferma.orientdb.OrientDBTrxFactory;
 import io.vertx.core.AsyncResult;
 
 public class OrientDBTrxTest extends AbstractOrientDBTest {

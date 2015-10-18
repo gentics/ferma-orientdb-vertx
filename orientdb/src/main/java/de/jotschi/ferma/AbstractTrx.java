@@ -2,7 +2,7 @@ package de.jotschi.ferma;
 
 import com.syncleus.ferma.FramedTransactionalGraph;
 
-import de.jotschi.ferma.impl.OrientDBTrxFactory;
+import de.jotschi.ferma.orientdb.OrientDBTrxFactory;
 
 /**
  * An abstract class that can be used to implement vendor specific graph database Trx classes.

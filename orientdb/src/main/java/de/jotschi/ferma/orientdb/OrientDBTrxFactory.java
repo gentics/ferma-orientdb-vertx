@@ -1,4 +1,4 @@
-package de.jotschi.ferma.impl;
+package de.jotschi.ferma.orientdb;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;

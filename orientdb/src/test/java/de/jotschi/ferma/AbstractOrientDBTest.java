@@ -3,8 +3,8 @@ package de.jotschi.ferma;
 import com.syncleus.ferma.FramedGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
-import de.jotschi.ferma.impl.OrientDBTrxFactory;
 import de.jotschi.ferma.model.Person;
+import de.jotschi.ferma.orientdb.OrientDBTrxFactory;
 import io.vertx.core.Vertx;
 
 public class AbstractOrientDBTest {
