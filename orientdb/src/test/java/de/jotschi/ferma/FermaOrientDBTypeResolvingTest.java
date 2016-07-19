@@ -7,7 +7,7 @@ import com.syncleus.ferma.VertexFrame;
 import de.jotschi.ferma.model.IJob;
 import de.jotschi.ferma.model.Job;
 
-public class FermaOrientDBTypeResolving extends AbstractOrientDBTest {
+public class FermaOrientDBTypeResolvingTest extends AbstractOrientDBTest {
 
 	@Test
 	public void testCasting() {

@@ -2,13 +2,14 @@ package de.jotschi.ferma.orientdb;
 
 import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
 import com.syncleus.ferma.FramedTransactionalGraph;
+import com.syncleus.ferma.typeresolvers.TypeResolver;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
 import de.jotschi.ferma.AbstractTrx;
 
 public class OrientDBTrx extends AbstractTrx {
 
-	public OrientDBTrx(OrientGraphFactory factory, OrientDBTypeResolver typeResolver) {
+	public OrientDBTrx(OrientGraphFactory factory, TypeResolver typeResolver) {
 		FramedTransactionalGraph transaction = new DelegatingFramedTransactionalOrientGraph<>(factory.getTx(), typeResolver);
 		init(transaction);
 	}

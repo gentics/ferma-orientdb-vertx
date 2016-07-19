@@ -33,7 +33,7 @@ public class OrientDBTrxTest extends AbstractOrientDBTest {
 			if (e.get() == 1) {
 				String msg = "Cannot UPDATE the record #13:8 because the version is not the latest. Probably you are updating an old record or it has been modified by another user (db=v7 your=v6)";
 				// "test #9:1 blub adsd"
-				throw new OConcurrentModificationException(msg);
+				throw new OConcurrentModificationException(null);
 			} else {
 				trx.complete("OK");
 			}

@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
 import com.orientechnologies.orient.core.exception.OSchemaException;
 import com.syncleus.ferma.FramedGraph;
+import com.syncleus.ferma.typeresolvers.TypeResolver;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
 import de.jotschi.ferma.NoTrx;
@@ -45,7 +46,7 @@ public class OrientDBTrxFactory implements TrxFactory {
 
 	protected OrientGraphFactory factory;
 
-	private OrientDBTypeResolver typeResolver;
+	private TypeResolver typeResolver;
 	protected Vertx vertx;
 
 	public OrientDBTrxFactory(OrientGraphFactory factory, Vertx vertx, String... basePaths) {
