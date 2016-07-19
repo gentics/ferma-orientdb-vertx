@@ -8,8 +8,8 @@ import de.jotschi.ferma.AbstractTrx;
 
 public class OrientDBTrx extends AbstractTrx {
 
-	public OrientDBTrx(OrientGraphFactory factory) {
-		FramedTransactionalGraph transaction = new DelegatingFramedTransactionalOrientGraph<>(factory.getTx(), true, false);
+	public OrientDBTrx(OrientGraphFactory factory, OrientDBTypeResolver typeResolver) {
+		FramedTransactionalGraph transaction = new DelegatingFramedTransactionalOrientGraph<>(factory.getTx(), typeResolver);
 		init(transaction);
 	}
 

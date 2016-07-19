@@ -1,40 +1,49 @@
 package de.jotschi.ferma.orientdb;
 
-import java.util.Set;
+import org.apache.commons.lang.NotImplementedException;
 
+import com.syncleus.ferma.AbstractEdgeFrame;
+import com.syncleus.ferma.AbstractVertexFrame;
+import com.syncleus.ferma.EdgeFrame;
 import com.syncleus.ferma.VertexFrame;
 import com.syncleus.ferma.traversals.EdgeTraversal;
-import com.syncleus.ferma.traversals.TraversalFunction;
 import com.syncleus.ferma.traversals.VertexTraversal;
 import com.syncleus.ferma.typeresolvers.TypeResolver;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.impls.orient.OrientEdge;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
-import com.tinkerpop.gremlin.Tokens;
 
 public class OrientDBTypeResolver implements TypeResolver {
 
+	private final ElementTypeClassCache elementTypCache;
+
+	public OrientDBTypeResolver(String... packagePaths) {
+		this.elementTypCache = new ElementTypeClassCache(packagePaths);
+	}
+
 	@Override
 	public <T> Class<? extends T> resolve(Element element, Class<T> kind) {
-		System.out.println("Resolve " + kind.getName());
 		if (element instanceof OrientVertex) {
 			OrientVertex orientVertex = (OrientVertex) element;
 			String name = orientVertex.getType().getName();
-			try {
-				Class<T> classOfT = (Class<T>) Class.forName("de.jotschi.ferma.model." + name);
-				System.out.println("Resolved to: " + classOfT.getName());
-				return classOfT;
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
+			return resolve(name, kind);
 		}
 		if (element instanceof OrientEdge) {
 			OrientEdge orientEdge = (OrientEdge) element;
 			String name = orientEdge.getType().getName();
+			return resolve(name, kind);
 		}
-		System.out.println(element.getClass());
-		// TODO Auto-generated method stub
-		return kind;
+		return null;
+	}
+
+	private <T> Class<? extends T> resolve(String type, Class<T> kind) {
+		final Class<T> nodeKind = (Class<T>) this.elementTypCache.forName(type);
+		if (kind.isAssignableFrom(nodeKind) || kind.equals(VertexFrame.class) || kind.equals(EdgeFrame.class)
+				|| kind.equals(AbstractVertexFrame.class) || kind.equals(AbstractEdgeFrame.class) || kind.equals(Object.class)) {
+			return nodeKind;
+		} else {
+			return kind;
+		}
 	}
 
 	@Override
@@ -42,59 +51,56 @@ public class OrientDBTypeResolver implements TypeResolver {
 		if (element instanceof OrientVertex) {
 			OrientVertex orientVertex = (OrientVertex) element;
 			String name = orientVertex.getType().getName();
-			try {
-				Class<?> classOfT = Class.forName("de.jotschi.ferma.model." + name);
-				System.out.println("Resolved to: " + classOfT.getName());
-				return classOfT;
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
+			return this.elementTypCache.forName(name);
 		}
 		if (element instanceof OrientEdge) {
 			OrientEdge orientEdge = (OrientEdge) element;
 			String name = orientEdge.getType().getName();
+			return this.elementTypCache.forName(name);
 		}
 		return null;
 	}
 
 	@Override
 	public void init(Element element, Class<?> kind) {
-
+		// NOP
 	}
 
 	@Override
 	public void deinit(Element element) {
-		System.out.println("DeInit");
+		throw new NotImplementedException("DeInit is not yet supported.");
 	}
 
 	@Override
 	public VertexTraversal<?, ?, ?> hasType(VertexTraversal<?, ?, ?> traverser, Class<?> type) {
-		System.out.println("TYPE:" + type);
 		return traverser.filter(vertex -> {
 			Class<?> vertexType = resolve(vertex.getElement());
-			if (vertexType == type) {
-				return true;
-			}
-			return false;
+			return vertexType == type;
 		});
 	}
 
 	@Override
 	public EdgeTraversal<?, ?, ?> hasType(EdgeTraversal<?, ?, ?> traverser, Class<?> type) {
-		// TODO Auto-generated method stub
-		return null;
+		return traverser.filter(edge -> {
+			Class<?> edgeType = resolve(edge.getElement());
+			return edgeType == type;
+		});
 	}
 
 	@Override
 	public VertexTraversal<?, ?, ?> hasNotType(VertexTraversal<?, ?, ?> traverser, Class<?> type) {
-		// TODO Auto-generated method stub
-		return null;
+		return traverser.filter(vertex -> {
+			Class<?> vertexType = resolve(vertex.getElement());
+			return vertexType == type;
+		});
 	}
 
 	@Override
 	public EdgeTraversal<?, ?, ?> hasNotType(EdgeTraversal<?, ?, ?> traverser, Class<?> type) {
-		// TODO Auto-generated method stub
-		return null;
+		return traverser.filter(edge -> {
+			Class<?> edgeType = resolve(edge.getElement());
+			return edgeType == type;
+		});
 	}
 
 }

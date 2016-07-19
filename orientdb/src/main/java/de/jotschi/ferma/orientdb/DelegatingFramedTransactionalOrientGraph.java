@@ -6,8 +6,8 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 public class DelegatingFramedTransactionalOrientGraph<G extends OrientGraph> extends AbstractDelegatingFramedOrientGraph<G>
 		implements WrapperFramedTransactionalGraph<G> {
 
-	public DelegatingFramedTransactionalOrientGraph(final G delegate, final boolean typeResolution, final boolean annotationsSupported) {
-		super(delegate, new OrientDBTypeResolver());
+	public DelegatingFramedTransactionalOrientGraph(final G delegate, OrientDBTypeResolver resolver) {
+		super(delegate, resolver);
 	}
 
 	@Override
