@@ -9,7 +9,7 @@ public class OrientDBNoTrx extends AbstractNoTrx implements AutoCloseable {
 
 
 	public OrientDBNoTrx(OrientGraphFactory factory) {
-		FramedGraph graph = new DelegatingFramedOrientGraph<>(factory.getNoTx(), true, false);
+		FramedGraph graph = new DelegatingFramedOrientGraph<>(factory.getNoTx(), new OrientDBTypeResolver());
 		init(graph);
 	}
 

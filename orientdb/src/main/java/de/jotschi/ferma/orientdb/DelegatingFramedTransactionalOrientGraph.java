@@ -7,7 +7,7 @@ public class DelegatingFramedTransactionalOrientGraph<G extends OrientGraph> ext
 		implements WrapperFramedTransactionalGraph<G> {
 
 	public DelegatingFramedTransactionalOrientGraph(final G delegate, final boolean typeResolution, final boolean annotationsSupported) {
-		super(delegate, typeResolution, annotationsSupported);
+		super(delegate, new OrientDBTypeResolver());
 	}
 
 	@Override
