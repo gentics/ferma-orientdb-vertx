@@ -8,8 +8,8 @@ import de.jotschi.ferma.AbstractNoTrx;
 public class OrientDBNoTrx extends AbstractNoTrx implements AutoCloseable {
 
 
-	public OrientDBNoTrx(OrientGraphFactory factory) {
-		FramedGraph graph = new DelegatingFramedOrientGraph<>(factory.getNoTx(), true, false);
+	public OrientDBNoTrx(OrientGraphFactory factory,OrientDBTypeResolver resolver) {
+		FramedGraph graph = new DelegatingFramedOrientGraph<>(factory.getNoTx(), resolver);
 		init(graph);
 	}
 

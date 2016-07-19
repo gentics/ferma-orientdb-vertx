@@ -7,7 +7,6 @@ import com.orientechnologies.orient.core.exception.OConcurrentModificationExcept
 import com.orientechnologies.orient.core.exception.OSchemaException;
 import com.syncleus.ferma.FramedGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
-import com.tinkerpop.gremlin.Tokens.T;
 
 import de.jotschi.ferma.NoTrx;
 import de.jotschi.ferma.Trx;
@@ -46,21 +45,23 @@ public class OrientDBTrxFactory implements TrxFactory {
 
 	protected OrientGraphFactory factory;
 
+	private OrientDBTypeResolver typeResolver;
 	protected Vertx vertx;
 
-	public OrientDBTrxFactory(OrientGraphFactory factory, Vertx vertx) {
+	public OrientDBTrxFactory(OrientGraphFactory factory, Vertx vertx, String... basePaths) {
 		this.factory = factory;
 		this.vertx = vertx;
+		this.typeResolver = new OrientDBTypeResolver(basePaths);
 	}
 
 	@Override
 	public Trx trx() {
-		return new OrientDBTrx(factory);
+		return new OrientDBTrx(factory, typeResolver);
 	}
 
 	@Override
 	public NoTrx noTrx() {
-		return new OrientDBNoTrx(factory);
+		return new OrientDBNoTrx(factory, typeResolver);
 	}
 
 	@Override
@@ -123,7 +124,7 @@ public class OrientDBTrxFactory implements TrxFactory {
 					bh.fail(rh.cause());
 				}
 			});
-		} , false, resultHandler);
+		}, false, resultHandler);
 		return;
 	}
 
@@ -150,7 +151,7 @@ public class OrientDBTrxFactory implements TrxFactory {
 					bh.complete(rh.result());
 				}
 			});
-		} , false, resultHandler);
+		}, false, resultHandler);
 		return;
 	}
 

@@ -10,7 +10,7 @@ import io.vertx.core.Vertx;
 public class AbstractOrientDBTest {
 
 	protected OrientGraphFactory graphFactory = new OrientGraphFactory("memory:tinkerpop").setupPool(4, 10);
-	protected OrientDBTrxFactory graph = new OrientDBTrxFactory(graphFactory, Vertx.vertx());
+	protected OrientDBTrxFactory graph = new OrientDBTrxFactory(graphFactory, Vertx.vertx(), "de.jotschi.ferma.model");
 
 	protected void manipulatePerson(FramedGraph graph, Person p) {
 		p.setName("Changed " + System.currentTimeMillis());
