@@ -15,14 +15,12 @@ public abstract class AbstractDelegatingFramedOrientGraph<G extends OrientBaseGr
 
 	@Override
 	public <T> T addFramedVertex(Object id, final ClassInitializer<T> initializer) {
-		final T framedVertex = frameNewElement(this.getBaseGraph().addVertex(id), initializer);
-		return framedVertex;
+		return frameNewElement(this.getBaseGraph().addVertex(id), initializer);
 	}
 
 	@Override
 	public <T> T addFramedEdge(Object id, VertexFrame source, VertexFrame destination, String label, ClassInitializer<T> initializer) {
-		final T framedEdge = frameNewElement(this.getBaseGraph().addEdge(id, source.getElement(), destination.getElement(), label), initializer);
-		return framedEdge;
+		return frameNewElement(this.getBaseGraph().addEdge(id, source.getElement(), destination.getElement(), label), initializer);
 	}
 
 	@Override

@@ -7,14 +7,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
+import org.reflections.Reflections;
 
 import com.gentics.ferma.Trx;
+import com.gentics.ferma.annotation.GraphElement;
 import com.gentics.ferma.model.Person;
 import com.gentics.ferma.orientdb.OrientDBTrxFactory;
 
@@ -31,7 +34,7 @@ public class TrxTest extends AbstractOrientDBTest {
 		CompletableFuture<AsyncResult<Object>> fut = new CompletableFuture<>();
 		graph.asyncTrx(trx -> {
 			trx.fail("blub");
-		} , rh -> {
+		}, rh -> {
 			fut.complete(rh);
 		});
 
@@ -46,7 +49,7 @@ public class TrxTest extends AbstractOrientDBTest {
 		CompletableFuture<AsyncResult<Object>> fut = new CompletableFuture<>();
 		graph.asyncTrx(trx -> {
 			trx.complete("test");
-		} , rh -> {
+		}, rh -> {
 			fut.complete(rh);
 		});
 		AsyncResult<Object> result = fut.get(5, TimeUnit.SECONDS);
@@ -75,7 +78,7 @@ public class TrxTest extends AbstractOrientDBTest {
 					graph.asyncTrx(trx -> {
 						manipulatePerson(OrientDBTrxFactory.getThreadLocalGraph(), person);
 						trx.complete(person);
-					} , rh -> {
+					}, rh -> {
 						assertEquals(Person.class, rh.result().getClass());
 						latch.countDown();
 					});
@@ -174,7 +177,7 @@ public class TrxTest extends AbstractOrientDBTest {
 		CompletableFuture<AsyncResult<Object>> cf = new CompletableFuture<>();
 		graph.asyncTrx(trx -> {
 			trx.failed();
-		} , rh -> {
+		}, rh -> {
 			cf.complete(rh);
 		});
 		assertFalse(cf.get().succeeded());
@@ -185,7 +188,7 @@ public class TrxTest extends AbstractOrientDBTest {
 		CompletableFuture<Throwable> cf = new CompletableFuture<>();
 		graph.asyncTrx(trx -> {
 			throw new RuntimeException("error");
-		} , rh -> {
+		}, rh -> {
 			cf.complete(rh.cause());
 		});
 		assertEquals("error", cf.get().getMessage());
@@ -197,7 +200,7 @@ public class TrxTest extends AbstractOrientDBTest {
 		CompletableFuture<Throwable> cf = new CompletableFuture<>();
 		graph.asyncNoTrx(noTrx -> {
 			throw new RuntimeException("error");
-		} , rh -> {
+		}, rh -> {
 			cf.complete(rh.cause());
 		});
 		assertEquals("error", cf.get().getMessage());
@@ -212,7 +215,7 @@ public class TrxTest extends AbstractOrientDBTest {
 				sleep(1000);
 				noTrx.complete("OK");
 			});
-		} , rh -> {
+		}, rh -> {
 			cf.complete(rh);
 		});
 		assertTrue(cf.get().succeeded());
@@ -227,7 +230,7 @@ public class TrxTest extends AbstractOrientDBTest {
 				sleep(1000);
 				trx.complete("OK");
 			});
-		} , rh -> {
+		}, rh -> {
 			System.out.println("Completed async trx");
 			cf.complete(rh);
 		});
@@ -240,7 +243,7 @@ public class TrxTest extends AbstractOrientDBTest {
 		CompletableFuture<AsyncResult<Object>> cf = new CompletableFuture<>();
 		graph.asyncNoTrx(noTrx -> {
 			noTrx.complete("OK");
-		} , rh -> {
+		}, rh -> {
 			cf.complete(rh);
 		});
 		assertEquals("OK", cf.get().result());

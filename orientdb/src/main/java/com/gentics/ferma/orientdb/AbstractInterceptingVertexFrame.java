@@ -1,9 +1,9 @@
 package com.gentics.ferma.orientdb;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gentics.ferma.annotation.GraphElement;
 import com.syncleus.ferma.AbstractVertexFrame;
 import com.syncleus.ferma.DelegatingFramedGraph;
 import com.syncleus.ferma.FramedGraph;

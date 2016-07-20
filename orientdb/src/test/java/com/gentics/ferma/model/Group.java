@@ -2,8 +2,10 @@ package com.gentics.ferma.model;
 
 import java.util.List;
 
+import com.gentics.ferma.annotation.GraphElement;
 import com.gentics.ferma.orientdb.AbstractInterceptingVertexFrame;
 
+@GraphElement
 public class Group extends AbstractInterceptingVertexFrame {
 
 	public List<? extends Person> getMembers() {

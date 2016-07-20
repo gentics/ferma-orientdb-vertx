@@ -1,6 +1,7 @@
 package com.gentics.ferma.orientdb;
 
 
+import com.gentics.ferma.annotation.GraphElement;
 import com.syncleus.ferma.AbstractEdgeFrame;
 import com.syncleus.ferma.DelegatingFramedGraph;
 import com.syncleus.ferma.FramedGraph;
@@ -9,7 +10,7 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.util.wrappers.wrapped.WrappedEdge;
 import com.tinkerpop.blueprints.util.wrappers.wrapped.WrappedElement;
-
+@GraphElement
 public class AbstractInterceptingEdgeFrame extends AbstractEdgeFrame {
 
 	private Object id;

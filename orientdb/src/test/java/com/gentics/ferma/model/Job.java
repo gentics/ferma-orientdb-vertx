@@ -2,10 +2,10 @@ package com.gentics.ferma.model;
 
 import java.util.List;
 
-import com.gentics.ferma.annotation.GraphType;
+import com.gentics.ferma.annotation.GraphElement;
 import com.gentics.ferma.orientdb.AbstractInterceptingVertexFrame;
 
-@GraphType
+@GraphElement
 public class Job extends AbstractInterceptingVertexFrame implements IJob {
 
 	public List<? extends Person> getEmployee() {

@@ -9,5 +9,4 @@ public class DelegatingFramedOrientGraph<G extends OrientGraphNoTx> extends Abst
 		super(delegate, typeResolver);
 	}
 
-
 }

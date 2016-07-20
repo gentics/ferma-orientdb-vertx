@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.reflections.Reflections;
 
-import com.gentics.ferma.annotation.GraphType;
+import com.gentics.ferma.annotation.GraphElement;
 
 /**
  * Type cache which also provides resolving methods which cache the result.
@@ -24,7 +24,7 @@ public class ElementTypeClassCache {
 	public Class forName(final String className) {
 		return this.classStringCache.computeIfAbsent(className, (key) -> {
 			for (String basePath : basePaths) {
-				Set<Class<?>> graphTypeClasses = new Reflections(basePath).getTypesAnnotatedWith(GraphType.class);
+				Set<Class<?>> graphTypeClasses = new Reflections(basePath).getTypesAnnotatedWith(GraphElement.class);
 				for (Class<?> clazz : graphTypeClasses) {
 					if (clazz.getSimpleName().equals(key)) {
 						return clazz;
