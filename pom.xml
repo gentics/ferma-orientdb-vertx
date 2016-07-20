@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.gentics.ferma</groupId>
 	<artifactId>ferma-extensions</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
 		<ferma.version>2.2.0-SNAPSHOT</ferma.version>
@@ -20,7 +20,7 @@
 		<connection>scm:git:git@github.com:gentics/ferma-extensions.git</connection>
 		<developerConnection>scm:git:git@github.com:gentics/ferma-extensions.git</developerConnection>
 		<url>https://github.com/gentics/ferma-extensions</url>
-		<tag>ferma-extensions-0.0.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<modules>
