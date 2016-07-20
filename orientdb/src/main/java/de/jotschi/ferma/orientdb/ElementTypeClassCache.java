@@ -3,6 +3,11 @@ package de.jotschi.ferma.orientdb;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
+import org.reflections.Reflections;
+
+import de.jotschi.ferma.annotation.GraphType;
 
 /**
  * Type cache which also provides resolving methods which cache the result.
@@ -19,10 +24,11 @@ public class ElementTypeClassCache {
 	public Class forName(final String className) {
 		return this.classStringCache.computeIfAbsent(className, (key) -> {
 			for (String basePath : basePaths) {
-				try {
-					return Class.forName(basePath + "." + key);
-				} catch (final ClassNotFoundException e) {
-
+				Set<Class<?>> graphTypeClasses = new Reflections(basePath).getTypesAnnotatedWith(GraphType.class);
+				for (Class<?> clazz : graphTypeClasses) {
+					if (clazz.getSimpleName().equals(key)) {
+						return clazz;
+					}
 				}
 			}
 			throw new IllegalStateException("The class {" + className + "} cannot be found for basePaths {" + Arrays.toString(basePaths) + "}");

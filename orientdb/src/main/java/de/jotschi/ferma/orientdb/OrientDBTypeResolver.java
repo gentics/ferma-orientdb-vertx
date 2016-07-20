@@ -30,7 +30,7 @@ public class OrientDBTypeResolver implements TypeResolver {
 		}
 		if (element instanceof OrientEdge) {
 			OrientEdge orientEdge = (OrientEdge) element;
-			String name = orientEdge.getType().getName();
+			String name = orientEdge.getType().getSuperClass().getName();
 			return resolve(name, kind);
 		}
 		return null;
