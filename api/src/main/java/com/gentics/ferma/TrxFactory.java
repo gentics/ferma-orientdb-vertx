@@ -28,7 +28,6 @@ public interface TrxFactory {
 	 *            Handler that will be executed within the scope of the transaction.
 	 * @param resultHandler
 	 *            Handler that is being invoked when the transaction has been committed
-	 * @return
 	 */
 	<T> void trx(TrxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler);
 
@@ -39,7 +38,6 @@ public interface TrxFactory {
 	 * @param txHandler
 	 *            Handler that will be executed within the scope of the transaction.
 	 * @param resultHandler
-	 * @return
 	 */
 	<T> void asyncTrx(TrxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler);
 
@@ -74,7 +72,6 @@ public interface TrxFactory {
 	 * 
 	 * @param txHandler
 	 * @param resultHandler
-	 * @return
 	 */
 	<T> void asyncNoTrx(TrxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler);
 }
