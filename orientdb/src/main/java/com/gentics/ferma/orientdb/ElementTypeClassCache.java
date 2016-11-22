@@ -1,6 +1,5 @@
 package com.gentics.ferma.orientdb;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -31,7 +30,7 @@ public class ElementTypeClassCache {
 					}
 				}
 			}
-			throw new IllegalStateException("The class {" + className + "} cannot be found for basePaths {" + Arrays.toString(basePaths) + "}");
+			return null;
 		});
 	}
 }

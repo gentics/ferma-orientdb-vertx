@@ -26,18 +26,31 @@ public class OrientDBTypeResolver implements TypeResolver {
 		if (element instanceof OrientVertex) {
 			OrientVertex orientVertex = (OrientVertex) element;
 			String name = orientVertex.getType().getName();
-			return resolve(name, kind);
+			Class<T> clazz = (Class<T>) resolve(name, kind);
+			if (clazz == null) {
+				return kind;
+			} else {
+				return clazz;
+			}
 		}
 		if (element instanceof OrientEdge) {
 			OrientEdge orientEdge = (OrientEdge) element;
 			String name = orientEdge.getType().getSuperClass().getName();
-			return resolve(name, kind);
+			Class<T> clazz = (Class<T>) resolve(name, kind);
+			if (clazz == null) {
+				return kind;
+			} else {
+				return clazz;
+			}
 		}
-		return null;
+		throw new RuntimeException("The element type {" + element.getClass() + "} is not supported by the orientdb type resolver.");
 	}
 
 	private <T> Class<? extends T> resolve(String type, Class<T> kind) {
 		final Class<T> nodeKind = (Class<T>) this.elementTypCache.forName(type);
+		if (nodeKind == null) {
+			return kind;
+		}
 		if (kind.isAssignableFrom(nodeKind) || kind.equals(VertexFrame.class) || kind.equals(EdgeFrame.class)
 				|| kind.equals(AbstractVertexFrame.class) || kind.equals(AbstractEdgeFrame.class) || kind.equals(Object.class)) {
 			return nodeKind;
