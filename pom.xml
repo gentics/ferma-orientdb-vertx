@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.gentics.ferma</groupId>
 	<artifactId>ferma-extensions</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.3</version>
 	<packaging>pom</packaging>
 	<properties>
 		<ferma.version>2.2.0-SNAPSHOT</ferma.version>
