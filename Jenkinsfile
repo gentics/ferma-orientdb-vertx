@@ -52,8 +52,8 @@ node('dockerSlave') {
     stage('Post Build') {
       if (Boolean.valueOf(runRelease)) {
         GitHelper.addCommit('.', gitCommitTag + ' Committing release changes (' + version + ')')
-        GitHelper.addTag("node-" + version, 'Release of version ' + version)
-        GitHelper.pushTag("node-" + version)
+        GitHelper.addTag(version, 'Release of version ' + version)
+        GitHelper.pushTag(version)
         version = MavenHelper.getNextSnapShotVersion(version)
         MavenHelper.setVersion(version)
         GitHelper.addCommit('.', gitCommitTag + ' Prepare for the next development iteration (' + version + ')')
