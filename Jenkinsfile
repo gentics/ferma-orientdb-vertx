@@ -1,34 +1,69 @@
-properties([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'BooleanParameterDefinition', name: 'release', defaultValue: false]]]])
-if (!Boolean.valueOf(release)) {
-	stage 'Release Build'
-	echo "Skipped"
+// The GIT repository for this pipeline lib is defined in the global Jenkins setting
+@Library('jenkins-pipeline-library')
+import com.gentics.*
 
-	stage 'Build'
-	echo "Building " + env.BRANCH_NAME
-	node('dockerSlave') {
-		def mvnHome = tool 'M3'
-		stage 'Checkout'
-		checkout scm
-		
-		stage 'Test'
-		sh "${mvnHome}/bin/mvn -B clean test -Dmaven.test.failure.ignore"
-		step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/*.xml'])
-	}
-} else {
-	node('dockerSlave') {
-		def mvnHome = tool 'M3'
+// Make the helpers aware of this jobs environment
+JobContext.set(this)
 
-		stage 'Checkout'
-		sh "rm -rf *"
-		sh "rm -rf .git"
-		checkout scm
+GenericHelper.setParameterDefinitions([
+  new BooleanParameterDefinition('runTests',         true, "Whether to run the unit tests"),
+  new BooleanParameterDefinition('runRelease',       false, "Whether to run the release steps.")
+])
 
-        stage 'Test'
-        echo "Tests skipped..."
+final def sshAgent             = "601b6ce9-37f7-439a-ac0b-8e368947d98d"
+final def gitCommitTag         = '[Jenkins | ' + env.JOB_BASE_NAME + ']';
 
-        stage 'Release Build'
-		sshagent(['601b6ce9-37f7-439a-ac0b-8e368947d98d']) {
-			sh "${mvnHome}/bin/mvn -B release:prepare release:perform -Dresume=false -DignoreSnapshots=true -Darguments=\"-DskipTests\""
-		}
-	}
+node('dockerSlave') {
+  sshagent([sshAgent]) {
+    final def mvnHome = tool 'M3'
+    def version = null
+    def branchName = null
+
+    stage('Checkout') {
+      sh "rm -rf *; rm -rf .git"
+      checkout scm
+    }
+
+    stage('Preparation') {
+      branchName = GitHelper.fetchCurrentBranchName()
+      version = MavenHelper.getVersion()
+      if (Boolean.valueOf(runRelease)) {
+        version = MavenHelper.transformSnapshotToReleaseVersion(version)
+        MavenHelper.setVersion(version)
+      }
+    }
+
+    stage("Test") {
+      if (Boolean.valueOf(runTests)) {
+        try {
+          sh "${mvnHome}/bin/mvn -B clean test -Dmaven.test.failure.ignore"
+        } finally {
+          junit  "**/target/surefire-reports/*.xml"
+        }
+      } else {
+        echo "Skipped.."
+      }
+    }
+
+    stage("Build") {
+      sh "${mvnHome}/bin/mvn -B clean deploy -DskipTests"
+    }
+
+    stage('Post Build') {
+      if (Boolean.valueOf(runRelease)) {
+        GitHelper.addCommit('.', gitCommitTag + ' Committing release changes (' + version + ')')
+        GitHelper.addTag("node-" + version, 'Release of version ' + version)
+        GitHelper.pushTag("node-" + version)
+        version = MavenHelper.getNextSnapShotVersion(version)
+        MavenHelper.setVersion(version)
+        GitHelper.addCommit('.', gitCommitTag + ' Prepare for the next development iteration (' + version + ')')
+        GitHelper.pushBranch(branchName)
+      }
+    }
+  }
 }
+
+
+
+
+
