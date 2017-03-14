@@ -1,23 +1,21 @@
 package com.gentics.ferma;
 
-import static com.gentics.ferma.util.TestUtils.*;
+import static com.gentics.ferma.util.TestUtils.failingLatch;
+import static com.gentics.ferma.util.TestUtils.run;
+import static com.gentics.ferma.util.TestUtils.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
-import org.reflections.Reflections;
 
-import com.gentics.ferma.Trx;
-import com.gentics.ferma.annotation.GraphElement;
 import com.gentics.ferma.model.Person;
 import com.gentics.ferma.orientdb.OrientDBTrxFactory;
 

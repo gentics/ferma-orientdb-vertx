@@ -14,7 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 
-import com.gentics.ferma.Trx;
 import com.gentics.ferma.model.Person;
 import com.gentics.ferma.orientdb.OrientDBTrxFactory;
 import com.orientechnologies.orient.core.exception.OConcurrentModificationException;

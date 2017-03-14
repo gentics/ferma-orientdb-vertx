@@ -30,4 +30,14 @@ public interface Trx extends AutoCloseable {
 	@Override
 	void close();
 
+	/**
+	 * Add new isolated vertex to the graph.
+	 * 
+	 * @param classOfT
+	 * @return
+	 */
+	default <T> T addVertex(Class<T> classOfT) {
+		return getGraph().addFramedVertex(classOfT);
+	}
+
 }

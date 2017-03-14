@@ -14,6 +14,7 @@ public class FermaOrientDBTypeResolvingTest extends AbstractOrientDBTest {
 		try (Trx tx = graph.trx()) {
 			Job jobCTO = tx.getGraph().addFramedVertex(Job.class);
 			jobCTO.setName("Chief Technology Officer");
+			
 			VertexFrame frame = tx.getGraph().v().has(Job.class).next();
 			System.out.println(frame.getClass().getName());
 
