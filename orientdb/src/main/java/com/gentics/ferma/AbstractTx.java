@@ -1,13 +1,13 @@
 package com.gentics.ferma;
 
-import com.gentics.ferma.Trx;
-import com.gentics.ferma.orientdb.OrientDBTrxFactory;
+import com.gentics.ferma.Tx;
+import com.gentics.ferma.orientdb.OrientDBTxFactory;
 import com.syncleus.ferma.FramedTransactionalGraph;
 
 /**
- * An abstract class that can be used to implement vendor specific graph database Trx classes.
+ * An abstract class that can be used to implement vendor specific graph database Tx classes.
  */
-public abstract class AbstractTrx extends AbstractTrxBase<FramedTransactionalGraph>implements Trx {
+public abstract class AbstractTx extends AbstractTxBase<FramedTransactionalGraph>implements Tx {
 
 	private boolean isSuccess = false;
 
@@ -32,7 +32,7 @@ public abstract class AbstractTrx extends AbstractTrxBase<FramedTransactionalGra
 
 	@Override
 	public void close() {
-		OrientDBTrxFactory.setThreadLocalGraph(getOldGraph());
+		OrientDBTxFactory.setThreadLocalGraph(getOldGraph());
 		if (isSuccess()) {
 			commit();
 		} else {

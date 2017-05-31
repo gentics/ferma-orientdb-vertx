@@ -17,21 +17,21 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 import com.gentics.ferma.model.Person;
-import com.gentics.ferma.orientdb.OrientDBTrxFactory;
+import com.gentics.ferma.orientdb.OrientDBTxFactory;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
-public class TrxTest extends AbstractOrientDBTest {
+public class TxTest extends AbstractOrientDBTest {
 
-	private static final Logger log = LoggerFactory.getLogger(TrxTest.class);
+	private static final Logger log = LoggerFactory.getLogger(TxTest.class);
 
 	@Test
 	public void testAsyncTestErrorHandling() throws Exception {
 		CompletableFuture<AsyncResult<Object>> fut = new CompletableFuture<>();
-		graph.asyncTrx(trx -> {
-			trx.fail("blub");
+		graph.asyncTx(tx -> {
+			tx.fail("blub");
 		}, rh -> {
 			fut.complete(rh);
 		});
@@ -45,8 +45,8 @@ public class TrxTest extends AbstractOrientDBTest {
 	@Test
 	public void testAsyncTestSuccessHandling() throws Exception {
 		CompletableFuture<AsyncResult<Object>> fut = new CompletableFuture<>();
-		graph.asyncTrx(trx -> {
-			trx.complete("test");
+		graph.asyncTx(tx -> {
+			tx.complete("test");
 		}, rh -> {
 			fut.complete(rh);
 		});
@@ -61,21 +61,21 @@ public class TrxTest extends AbstractOrientDBTest {
 		final int nThreads = 10;
 		final int nRuns = 200;
 
-		try (Trx tx2 = graph.trx()) {
+		try (Tx tx2 = graph.tx()) {
 			Person person = tx2.getGraph().addFramedVertex(Person.class);
 			for (int r = 1; r <= nRuns; r++) {
 				final int currentRun = r;
 				CountDownLatch latch = new CountDownLatch(nThreads);
 
-				// Start two threads with a retry trx
+				// Start two threads with a retry tx
 				for (int i = 0; i < nThreads; i++) {
 					final int threadNo = i;
 					if (log.isTraceEnabled()) {
 						log.trace("Thread [" + threadNo + "] Starting");
 					}
-					graph.asyncTrx(trx -> {
-						manipulatePerson(OrientDBTrxFactory.getThreadLocalGraph(), person);
-						trx.complete(person);
+					graph.asyncTx(tx -> {
+						manipulatePerson(OrientDBTxFactory.getThreadLocalGraph(), person);
+						tx.complete(person);
 					}, rh -> {
 						assertEquals(Person.class, rh.result().getClass());
 						latch.countDown();
@@ -85,7 +85,7 @@ public class TrxTest extends AbstractOrientDBTest {
 				log.debug("Waiting on lock");
 				failingLatch(latch);
 
-				try (Trx tx = graph.trx()) {
+				try (Tx tx = graph.tx()) {
 					int expect = nThreads * r;
 					assertEquals("Expected {" + expect + "} tags since this is the " + r + "th run.", expect, person.getFriends().size());
 				}
@@ -98,21 +98,21 @@ public class TrxTest extends AbstractOrientDBTest {
 	// AtomicInteger i = new AtomicInteger(0);
 	//
 	// UserRoot root;
-	// try (Trx tx = graph.trx()) {
+	// try (Tx tx = graph.tx()) {
 	// root = person
 	// }
 	// int e = i.incrementAndGet();
-	// try (Trx tx = graph.trx()) {
+	// try (Tx tx = graph.tx()) {
 	// assertNotNull(root.create("testuser" + e, group(), user()));
 	// assertNotNull(boot.userRoot().findByUsername("testuser" + e));
 	// tx.success();
 	// }
-	// try (Trx tx = graph.trx()) {
+	// try (Tx tx = graph.tx()) {
 	// assertNotNull(boot.userRoot().findByUsername("testuser" + e));
 	// }
 	// int u = i.incrementAndGet();
 	// Runnable task = () -> {
-	// try (Trx tx = graph.trx()) {
+	// try (Tx tx = graph.tx()) {
 	// assertNotNull(root.create("testuser" + u, group(), user()));
 	// assertNotNull(boot.userRoot().findByUsername("testuser" + u));
 	// tx.failure();
@@ -123,7 +123,7 @@ public class TrxTest extends AbstractOrientDBTest {
 	// Thread t = new Thread(task);
 	// t.start();
 	// t.join();
-	// try (Trx tx = graph.trx()) {
+	// try (Tx tx = graph.tx()) {
 	// assertNull(boot.userRoot().findByUsername("testuser" + u));
 	// System.out.println("RUN: " + i.get());
 	// }
@@ -135,7 +135,7 @@ public class TrxTest extends AbstractOrientDBTest {
 	// User user = user();
 	//
 	// Runnable task2 = () -> {
-	// try (Trx tx = graph.trx()) {
+	// try (Tx tx = graph.tx()) {
 	// user.setUsername("test2");
 	// assertNotNull(boot.userRoot().findByUsername("test2"));
 	// tx.success();
@@ -143,7 +143,7 @@ public class TrxTest extends AbstractOrientDBTest {
 	// assertNotNull(boot.userRoot().findByUsername("test2"));
 	//
 	// Runnable task = () -> {
-	// try (Trx tx = db.trx()) {
+	// try (Tx tx = db.tx()) {
 	// user.setUsername("test3");
 	// assertNotNull(boot.userRoot().findByUsername("test3"));
 	// tx.failure();
@@ -163,7 +163,7 @@ public class TrxTest extends AbstractOrientDBTest {
 	// Thread t2 = new Thread(task2);
 	// t2.start();
 	// t2.join();
-	// try (Trx tx = graph.trx()) {
+	// try (Tx tx = graph.tx()) {
 	// assertNull(boot.userRoot().findByUsername("test3"));
 	// assertNotNull(boot.userRoot().findByUsername("test2"));
 	// }
@@ -171,10 +171,10 @@ public class TrxTest extends AbstractOrientDBTest {
 	// }
 	//
 	@Test
-	public void testAsyncTrxFailed() throws Throwable {
+	public void testAsyncTxFailed() throws Throwable {
 		CompletableFuture<AsyncResult<Object>> cf = new CompletableFuture<>();
-		graph.asyncTrx(trx -> {
-			trx.failed();
+		graph.asyncTx(tx -> {
+			tx.failed();
 		}, rh -> {
 			cf.complete(rh);
 		});
@@ -182,21 +182,9 @@ public class TrxTest extends AbstractOrientDBTest {
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testAsyncTrxWithError() throws Throwable {
+	public void testAsyncTxWithError() throws Throwable {
 		CompletableFuture<Throwable> cf = new CompletableFuture<>();
-		graph.asyncTrx(trx -> {
-			throw new RuntimeException("error");
-		}, rh -> {
-			cf.complete(rh.cause());
-		});
-		assertEquals("error", cf.get().getMessage());
-		throw cf.get();
-	}
-
-	@Test(expected = RuntimeException.class)
-	public void testAsyncNoTrxWithError() throws Throwable {
-		CompletableFuture<Throwable> cf = new CompletableFuture<>();
-		graph.asyncNoTrx(noTrx -> {
+		graph.asyncTx(tx -> {
 			throw new RuntimeException("error");
 		}, rh -> {
 			cf.complete(rh.cause());
@@ -206,14 +194,15 @@ public class TrxTest extends AbstractOrientDBTest {
 	}
 
 	@Test
-	public void testAsyncNoTrxNestedAsync() throws InterruptedException, ExecutionException {
+	public void testAsyncTxNestedAsync() throws InterruptedException, ExecutionException {
 		CompletableFuture<AsyncResult<Object>> cf = new CompletableFuture<>();
-		graph.asyncNoTrx(noTrx -> {
+		graph.asyncTx(tx -> {
 			run(() -> {
 				sleep(1000);
-				noTrx.complete("OK");
+				tx.complete("OK");
 			});
 		}, rh -> {
+			System.out.println("Completed async tx");
 			cf.complete(rh);
 		});
 		assertTrue(cf.get().succeeded());
@@ -221,26 +210,10 @@ public class TrxTest extends AbstractOrientDBTest {
 	}
 
 	@Test
-	public void testAsyncTrxNestedAsync() throws InterruptedException, ExecutionException {
+	public void testAsyncTxSuccess() throws Throwable {
 		CompletableFuture<AsyncResult<Object>> cf = new CompletableFuture<>();
-		graph.asyncTrx(trx -> {
-			run(() -> {
-				sleep(1000);
-				trx.complete("OK");
-			});
-		}, rh -> {
-			System.out.println("Completed async trx");
-			cf.complete(rh);
-		});
-		assertTrue(cf.get().succeeded());
-		assertEquals("OK", cf.get().result());
-	}
-
-	@Test
-	public void testAsyncNoTrxSuccess() throws Throwable {
-		CompletableFuture<AsyncResult<Object>> cf = new CompletableFuture<>();
-		graph.asyncNoTrx(noTrx -> {
-			noTrx.complete("OK");
+		graph.asyncTx(tx -> {
+			tx.complete("OK");
 		}, rh -> {
 			cf.complete(rh);
 		});

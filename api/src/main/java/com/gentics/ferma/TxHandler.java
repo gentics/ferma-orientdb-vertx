@@ -1,7 +1,7 @@
 package com.gentics.ferma;
 
 @FunctionalInterface
-public interface TrxHandler<E> {
+public interface TxHandler<E> {
 
 	/**
 	 * Something has happened, so handle it.

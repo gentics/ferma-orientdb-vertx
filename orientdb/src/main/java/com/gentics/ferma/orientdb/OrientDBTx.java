@@ -1,13 +1,13 @@
 package com.gentics.ferma.orientdb;
 
-import com.gentics.ferma.AbstractTrx;
+import com.gentics.ferma.AbstractTx;
 import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
 import com.syncleus.ferma.FramedTransactionalGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
-public class OrientDBTrx extends AbstractTrx {
+public class OrientDBTx extends AbstractTx {
 
-	public OrientDBTrx(OrientGraphFactory factory, OrientDBTypeResolver typeResolver) {
+	public OrientDBTx(OrientGraphFactory factory, OrientDBTypeResolver typeResolver) {
 		FramedTransactionalGraph transaction = new DelegatingFramedTransactionalOrientGraph<>(factory.getTx(), typeResolver);
 		init(transaction);
 	}
@@ -25,7 +25,7 @@ public class OrientDBTrx extends AbstractTrx {
 		} finally {
 			// Restore the old graph that was previously swapped with the current graph
 			getGraph().shutdown();
-			OrientDBTrxFactory.setThreadLocalGraph(getOldGraph());
+			OrientDBTxFactory.setThreadLocalGraph(getOldGraph());
 		}
 	}
 }

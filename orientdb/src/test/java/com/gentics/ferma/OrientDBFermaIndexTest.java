@@ -9,8 +9,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.gentics.ferma.NoTrx;
-import com.gentics.ferma.Trx;
 import com.gentics.ferma.model.Group;
 import com.gentics.ferma.model.Person;
 import com.gentics.ferma.orientdb.DelegatingFramedOrientGraph;
@@ -30,7 +28,7 @@ public class OrientDBFermaIndexTest extends AbstractOrientDBTest {
 
 	@Test
 	public void testOrientVerticleClass() {
-		try (Trx tx = graph.trx()) {
+		try (Tx tx = graph.tx()) {
 			Person p = tx.getGraph().addFramedVertex(Person.class);
 			p.setName("personName");
 			assertEquals(Person.class.getSimpleName(), ((OrientVertex) p.getElement()).getLabel());
@@ -42,14 +40,14 @@ public class OrientDBFermaIndexTest extends AbstractOrientDBTest {
 	 * Setup some indices. This is highly orientdb specific and may not be easy so setup using blueprint API.
 	 */
 	private void setupTypesAndIndices() {
-		try (NoTrx tx = graph.noTrx()) {
+		try (Tx tx = graph.tx()) {
 			OrientGraphNoTx g = ((OrientGraphNoTx) ((DelegatingFramedOrientGraph) tx.getGraph()).getBaseGraph());
 			// g.setUseClassForEdgeLabel(true);
 			g.setUseLightweightEdges(false);
 			g.setUseVertexFieldsForEdgeLabels(false);
 		}
 
-		try (NoTrx tx = graph.noTrx()) {
+		try (Tx tx = graph.tx()) {
 			OrientGraphNoTx g = ((OrientGraphNoTx) ((DelegatingFramedOrientGraph) tx.getGraph()).getBaseGraph());
 
 			OrientEdgeType e = g.createEdgeType("HAS_MEMBER");
@@ -75,7 +73,7 @@ public class OrientDBFermaIndexTest extends AbstractOrientDBTest {
 		// Create a group with x persons assigned to it.
 		List<Person> persons = new ArrayList<>();
 		Group g;
-		try (Trx tx = graph.trx()) {
+		try (Tx tx = graph.tx()) {
 			g = tx.getGraph().addFramedVertex(Group.class);
 			g.setName("groupName");
 			for (int i = 0; i < nMembers; i++) {
@@ -87,7 +85,7 @@ public class OrientDBFermaIndexTest extends AbstractOrientDBTest {
 			tx.success();
 		}
 
-		try (Trx tx = graph.trx()) {
+		try (Tx tx = graph.tx()) {
 			OrientGraph graph = ((OrientGraph) ((DelegatingFramedTransactionalOrientGraph) tx.getGraph()).getBaseGraph());
 			assertEquals(nMembers, g.getMembers().size());
 			long start = System.currentTimeMillis();

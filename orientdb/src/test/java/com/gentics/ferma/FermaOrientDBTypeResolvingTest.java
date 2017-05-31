@@ -2,7 +2,7 @@ package com.gentics.ferma;
 
 import org.junit.Test;
 
-import com.gentics.ferma.Trx;
+import com.gentics.ferma.Tx;
 import com.gentics.ferma.model.IJob;
 import com.gentics.ferma.model.Job;
 import com.syncleus.ferma.VertexFrame;
@@ -11,7 +11,7 @@ public class FermaOrientDBTypeResolvingTest extends AbstractOrientDBTest {
 
 	@Test
 	public void testCasting() {
-		try (Trx tx = graph.trx()) {
+		try (Tx tx = graph.tx()) {
 			Job jobCTO = tx.getGraph().addFramedVertex(Job.class);
 			jobCTO.setName("Chief Technology Officer");
 			

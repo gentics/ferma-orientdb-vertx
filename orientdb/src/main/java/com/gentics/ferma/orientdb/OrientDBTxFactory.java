@@ -1,12 +1,11 @@
 package com.gentics.ferma.orientdb;
 
-import com.gentics.ferma.NoTrx;
-import com.gentics.ferma.Trx;
-import com.gentics.ferma.TrxFactory;
+import com.gentics.ferma.Tx;
+import com.gentics.ferma.TxFactory;
 import com.syncleus.ferma.FramedGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
-public class OrientDBTrxFactory implements TrxFactory {
+public class OrientDBTxFactory implements TxFactory {
 
 	/**
 	 * Thread local that is used to store references to the used graph.
@@ -14,7 +13,7 @@ public class OrientDBTrxFactory implements TrxFactory {
 	public static ThreadLocal<FramedGraph> threadLocalGraph = new ThreadLocal<>();
 
 	public static void setThreadLocalGraph(FramedGraph graph) {
-		OrientDBTrxFactory.threadLocalGraph.set(graph);
+		OrientDBTxFactory.threadLocalGraph.set(graph);
 	}
 
 	/**
@@ -23,26 +22,21 @@ public class OrientDBTrxFactory implements TrxFactory {
 	 * @return
 	 */
 	public static FramedGraph getThreadLocalGraph() {
-		return OrientDBTrxFactory.threadLocalGraph.get();
+		return OrientDBTxFactory.threadLocalGraph.get();
 	}
 
 	protected OrientGraphFactory factory;
 
 	private OrientDBTypeResolver typeResolver;
 
-	public OrientDBTrxFactory(OrientGraphFactory factory, String... basePaths) {
+	public OrientDBTxFactory(OrientGraphFactory factory, String... basePaths) {
 		this.factory = factory;
 		this.typeResolver = new OrientDBTypeResolver(basePaths);
 	}
 
 	@Override
-	public Trx trx() {
-		return new OrientDBTrx(factory, typeResolver);
-	}
-
-	@Override
-	public NoTrx noTrx() {
-		return new OrientDBNoTrx(factory, typeResolver);
+	public Tx tx() {
+		return new OrientDBTx(factory, typeResolver);
 	}
 
 }

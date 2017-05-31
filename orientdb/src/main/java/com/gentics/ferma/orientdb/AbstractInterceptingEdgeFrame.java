@@ -36,7 +36,7 @@ public class AbstractInterceptingEdgeFrame extends AbstractEdgeFrame {
 
 	@Override
 	public FramedGraph getGraph() {
-		return new DelegatingFramedGraph<>(OrientDBTrxFactory.getThreadLocalGraph(), true, false);
+		return new DelegatingFramedGraph<>(OrientDBTxFactory.getThreadLocalGraph(), true, false);
 	}
 
 	@Override

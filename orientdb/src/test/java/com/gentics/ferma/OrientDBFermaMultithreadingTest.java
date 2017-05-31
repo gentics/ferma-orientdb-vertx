@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Test;
 
-import com.gentics.ferma.Trx;
+import com.gentics.ferma.Tx;
 import com.gentics.ferma.model.Person;
 import com.syncleus.ferma.VertexFrame;
 
@@ -30,13 +30,13 @@ public class OrientDBFermaMultithreadingTest extends AbstractOrientDBTest {
 
 	@Test
 	public void testMultithreading() {
-		try (Trx tx = graph.trx()) {
+		try (Tx tx = graph.tx()) {
 			p = addPersonWithFriends(tx.getGraph(), "SomePerson");
 			p.setName("joe");
 			tx.success();
 		}
 		runAndWait(() -> {
-			try (Trx tx = graph.trx()) {
+			try (Tx tx = graph.tx()) {
 				manipulatePerson(tx.getGraph(), p);
 			}
 		});
@@ -46,7 +46,7 @@ public class OrientDBFermaMultithreadingTest extends AbstractOrientDBTest {
 	public void testOrientThreadedTransactionalGraphWrapper() {
 
 		// Test creation of user in current thread
-		try (Trx tx = graph.trx()) {
+		try (Tx tx = graph.tx()) {
 			Person p = addPersonWithFriends(tx.getGraph(), "Person2");
 			manipulatePerson(tx.getGraph(), p);
 			tx.success();
@@ -54,27 +54,27 @@ public class OrientDBFermaMultithreadingTest extends AbstractOrientDBTest {
 
 		AtomicReference<Person> reference = new AtomicReference<>();
 		runAndWait(() -> {
-			try (Trx tx = graph.trx()) {
+			try (Tx tx = graph.tx()) {
 				manipulatePerson(tx.getGraph(), p);
 			}
-			try (Trx tx = graph.trx()) {
+			try (Tx tx = graph.tx()) {
 				Person p2 = addPersonWithFriends(tx.getGraph(), "Person3");
 				tx.success();
 				reference.set(p2);
 			}
 			runAndWait(() -> {
-				try (Trx tx = graph.trx()) {
+				try (Tx tx = graph.tx()) {
 					manipulatePerson(tx.getGraph(), p);
 				}
 			});
 		});
 
-		try (Trx tx = graph.trx()) {
+		try (Tx tx = graph.tx()) {
 			for (VertexFrame vertex : tx.getGraph().v().toList()) {
 				System.out.println(vertex.toString());
 			}
 		}
-		// try (Trx tx = db.trx()) {
+		// try (Tx tx = db.tx()) {
 		// manipulatePerson(tx.getGraph(), reference.get());
 		// }
 	}

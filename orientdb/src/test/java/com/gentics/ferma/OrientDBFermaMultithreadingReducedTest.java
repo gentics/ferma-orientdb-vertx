@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.gentics.ferma.Trx;
+import com.gentics.ferma.Tx;
 import com.gentics.ferma.model.Person;
 
 public class OrientDBFermaMultithreadingReducedTest extends AbstractOrientDBTest {
@@ -19,13 +19,13 @@ public class OrientDBFermaMultithreadingReducedTest extends AbstractOrientDBTest
 	}
 
 	private void setupData() {
-		try (Trx tx = graph.trx()) {
+		try (Tx tx = graph.tx()) {
 			String name = "SomeName";
 			p = addPersonWithFriends(tx.getGraph(), name);
 			// tx.getGraph().commit();
 			tx.success();
 			runAndWait(() -> {
-				try (Trx tx2 = graph.trx()) {
+				try (Tx tx2 = graph.tx()) {
 					readPerson(p);
 					manipulatePerson(tx2.getGraph(), p);
 				}
@@ -33,7 +33,7 @@ public class OrientDBFermaMultithreadingReducedTest extends AbstractOrientDBTest
 		}
 
 		runAndWait(() -> {
-			try (Trx tx2 = graph.trx()) {
+			try (Tx tx2 = graph.tx()) {
 				readPerson(p);
 				manipulatePerson(tx2.getGraph(), p);
 			}
@@ -47,7 +47,7 @@ public class OrientDBFermaMultithreadingReducedTest extends AbstractOrientDBTest
 		// fg.commit();
 		runAndWait(() -> {
 			Person reloaded;
-			try (Trx tx = graph.trx()) {
+			try (Tx tx = graph.tx()) {
 				manipulatePerson(tx.getGraph(), p);
 				String name = "newName";
 				p.setName(name);
@@ -58,7 +58,7 @@ public class OrientDBFermaMultithreadingReducedTest extends AbstractOrientDBTest
 				tx.success();
 			}
 			runAndWait(() -> {
-				try (Trx tx2 = graph.trx()) {
+				try (Tx tx2 = graph.tx()) {
 					readPerson(reloaded);
 				}
 			});

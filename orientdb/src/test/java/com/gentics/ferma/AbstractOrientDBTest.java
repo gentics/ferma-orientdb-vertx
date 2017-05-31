@@ -1,14 +1,14 @@
 package com.gentics.ferma;
 
 import com.gentics.ferma.model.Person;
-import com.gentics.ferma.orientdb.OrientDBTrxFactory;
+import com.gentics.ferma.orientdb.OrientDBTxFactory;
 import com.syncleus.ferma.FramedGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
 public class AbstractOrientDBTest {
 
 	protected OrientGraphFactory graphFactory = new OrientGraphFactory("memory:tinkerpop").setupPool(4, 10);
-	protected OrientDBTrxFactory graph = new OrientDBTrxFactory(graphFactory, "com.gentics.ferma.model");
+	protected OrientDBTxFactory graph = new OrientDBTxFactory(graphFactory, "com.gentics.ferma.model");
 
 	protected void manipulatePerson(FramedGraph graph, Person p) {
 		p.setName("Changed " + System.currentTimeMillis());

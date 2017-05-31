@@ -3,9 +3,8 @@ package com.gentics.ferma.orientdb.vertx;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import com.gentics.ferma.NoTrx;
-import com.gentics.ferma.Trx;
-import com.gentics.ferma.TrxHandler;
+import com.gentics.ferma.TxHandler;
+import com.gentics.ferma.Tx;
 import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
 import com.orientechnologies.orient.core.exception.OSchemaException;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
@@ -17,23 +16,23 @@ import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
-public class OrientDBTrxFactory extends com.gentics.ferma.orientdb.OrientDBTrxFactory implements TrxVertxFactory {
+public class OrientDBTxFactory extends com.gentics.ferma.orientdb.OrientDBTxFactory implements TxVertxFactory {
 
-	private static final Logger log = LoggerFactory.getLogger(OrientDBTrxFactory.class);
+	private static final Logger log = LoggerFactory.getLogger(OrientDBTxFactory.class);
 
 	protected Vertx vertx;
 
 	private int maxRetry = 25;
 
-	public OrientDBTrxFactory(OrientGraphFactory factory, Vertx vertx, String... basePaths) {
+	public OrientDBTxFactory(OrientGraphFactory factory, Vertx vertx, String... basePaths) {
 		super(factory, basePaths);
 		this.vertx = vertx;
 	}
 
 	@Override
-	public <T> void asyncTrx(TrxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler) {
+	public <T> void asyncTx(TxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler) {
 		vertx.executeBlocking(bh -> {
-			trx(txHandler, rh -> {
+			tx(txHandler, rh -> {
 				if (rh.succeeded()) {
 					bh.complete(rh.result());
 				} else {
@@ -43,24 +42,24 @@ public class OrientDBTrxFactory extends com.gentics.ferma.orientdb.OrientDBTrxFa
 		}, false, resultHandler);
 		return;
 	}
+	
+	
 
 	@Override
-	public <T> void asyncNoTrx(TrxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler) {
-		vertx.executeBlocking(bh -> {
-			Future<T> future = noTrx(txHandler);
-			future.setHandler(rh -> {
-				if (rh.failed()) {
-					bh.fail(rh.cause());
-				} else {
-					bh.complete(rh.result());
-				}
-			});
-		}, false, resultHandler);
-		return;
+	public <T> Future<T> tx(TxHandler<Future<T>> txHandler) {
+		Future<T> future = Future.future();
+		try (Tx tx = tx()) {
+			txHandler.handle(future);
+		} catch (Exception e) {
+			log.error("Error while handling no-transaction.", e);
+			return Future.failedFuture(e);
+		}
+		return future;
 	}
 
+
 	@Override
-	public <T> void trx(TrxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler) {
+	public <T> void tx(TxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler) {
 		/**
 		 * OrientDB uses the MVCC pattern which requires a retry of the code that manipulates the graph in cases where for example an
 		 * {@link OConcurrentModificationException} is thrown.
@@ -68,7 +67,7 @@ public class OrientDBTrxFactory extends com.gentics.ferma.orientdb.OrientDBTrxFa
 		Future<T> currentTransactionCompleted = null;
 		for (int retry = 0; retry < maxRetry; retry++) {
 			currentTransactionCompleted = Future.future();
-			try (Trx tx = trx()) {
+			try (Tx tx = tx()) {
 				// TODO FIXME get rid of the countdown latch
 				CountDownLatch latch = new CountDownLatch(1);
 				currentTransactionCompleted.setHandler(rh -> {
@@ -104,20 +103,8 @@ public class OrientDBTrxFactory extends com.gentics.ferma.orientdb.OrientDBTrxFa
 			resultHandler.handle(currentTransactionCompleted);
 			return;
 		}
-		resultHandler.handle(Future.failedFuture("retry limit for trx exceeded"));
+		resultHandler.handle(Future.failedFuture("retry limit for tx exceeded"));
 		return;
 
-	}
-
-	@Override
-	public <T> Future<T> noTrx(TrxHandler<Future<T>> txHandler) {
-		Future<T> future = Future.future();
-		try (NoTrx noTx = noTrx()) {
-			txHandler.handle(future);
-		} catch (Exception e) {
-			log.error("Error while handling no-transaction.", e);
-			return Future.failedFuture(e);
-		}
-		return future;
 	}
 }

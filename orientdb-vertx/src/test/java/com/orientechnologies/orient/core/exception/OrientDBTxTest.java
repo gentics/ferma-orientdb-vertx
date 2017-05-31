@@ -1,4 +1,4 @@
-package com.gentics.ferma;
+package com.orientechnologies.orient.core.exception;
 
 import static com.gentics.ferma.util.TestUtils.run;
 import static org.junit.Assert.assertEquals;
@@ -14,28 +14,29 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 
+import com.gentics.ferma.AbstractOrientDBTest;
+import com.gentics.ferma.Tx;
 import com.gentics.ferma.model.Person;
-import com.gentics.ferma.orientdb.OrientDBTrxFactory;
-import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
+import com.gentics.ferma.orientdb.OrientDBTxFactory;
 
 import io.vertx.core.AsyncResult;
 
-public class OrientDBTrxTest extends AbstractOrientDBTest {
+public class OrientDBTxTest extends AbstractOrientDBTest {
 
 	private Person p;
 
 	@Test
-	public void testAsyncTrxRetryHandling() throws Exception {
+	public void testAsyncTxRetryHandling() throws Exception {
 		CompletableFuture<AsyncResult<Object>> fut = new CompletableFuture<>();
 		AtomicInteger e = new AtomicInteger(0);
-		graph.asyncTrx(trx -> {
+		graph.asyncTx(tx -> {
 			e.incrementAndGet();
 			if (e.get() == 1) {
 				String msg = "Cannot UPDATE the record #13:8 because the version is not the latest. Probably you are updating an old record or it has been modified by another user (db=v7 your=v6)";
 				// "test #9:1 blub adsd"
 				throw new OConcurrentModificationException(msg);
 			} else {
-				trx.complete("OK");
+				tx.complete("OK");
 			}
 		} , rh -> {
 			fut.complete(rh);
@@ -48,10 +49,10 @@ public class OrientDBTrxTest extends AbstractOrientDBTest {
 	}
 
 	@Test
-	public void testAsyncTrxRetryHandling2() throws Exception {
+	public void testAsyncTxRetryHandling2() throws Exception {
 		// Test creation of user in current thread
 		int nFriendsBefore;
-		try (Trx tx = graph.trx()) {
+		try (Tx tx = graph.tx()) {
 			p = addPersonWithFriends(tx.getGraph(), "Person2");
 			manipulatePerson(tx.getGraph(), p);
 			tx.success();
@@ -62,11 +63,11 @@ public class OrientDBTrxTest extends AbstractOrientDBTest {
 		AtomicInteger i = new AtomicInteger(0);
 
 		run(() -> {
-			graph.trx(tx -> {
+			graph.tx(tx -> {
 				i.incrementAndGet();
 
-				System.out.println("Trx1");
-				addFriend(OrientDBTrxFactory.getThreadLocalGraph(), p);
+				System.out.println("Tx1");
+				addFriend(OrientDBTxFactory.getThreadLocalGraph(), p);
 				tx.complete();
 				if (i.get() <= 2) {
 					b.await();
@@ -77,11 +78,11 @@ public class OrientDBTrxTest extends AbstractOrientDBTest {
 		});
 
 		run(() -> {
-			graph.trx(tx -> {
+			graph.tx(tx -> {
 				i.incrementAndGet();
 
-				System.out.println("Trx2");
-				addFriend(OrientDBTrxFactory.getThreadLocalGraph(), p);
+				System.out.println("Tx2");
+				addFriend(OrientDBTxFactory.getThreadLocalGraph(), p);
 				tx.complete();
 				if (i.get() <= 2) {
 					b.await();
@@ -94,7 +95,7 @@ public class OrientDBTrxTest extends AbstractOrientDBTest {
 		b.await();
 		Thread.sleep(1000);
 		System.out.println("Asserting");
-		try (Trx tx = graph.trx()) {
+		try (Tx tx = graph.tx()) {
 			p = tx.getGraph().getFramedVertexExplicit(Person.class, p.getId());
 			int nFriendsAfter = p.getFriends().size();
 			assertEquals(nFriendsBefore + 2, nFriendsAfter);
@@ -103,10 +104,10 @@ public class OrientDBTrxTest extends AbstractOrientDBTest {
 	}
 
 	@Test
-	public void testTrxConflictHandling() throws InterruptedException, BrokenBarrierException, TimeoutException {
+	public void testTxConflictHandling() throws InterruptedException, BrokenBarrierException, TimeoutException {
 		// Test creation of user in current thread
 		int nFriendsBefore;
-		try (Trx tx = graph.trx()) {
+		try (Tx tx = graph.tx()) {
 			p = addPersonWithFriends(tx.getGraph(), "Person2");
 			manipulatePerson(tx.getGraph(), p);
 			tx.success();
@@ -120,7 +121,7 @@ public class OrientDBTrxTest extends AbstractOrientDBTest {
 
 		b.await();
 		Thread.sleep(1000);
-		try (Trx tx = graph.trx()) {
+		try (Tx tx = graph.tx()) {
 			p = tx.getGraph().getFramedVertexExplicit(Person.class, p.getId());
 			int nFriendsAfter = p.getFriends().size();
 			assertEquals(nFriendsBefore + 2, nFriendsAfter);
@@ -134,7 +135,7 @@ public class OrientDBTrxTest extends AbstractOrientDBTest {
 				System.out.println("Try: " + retry);
 				boolean doRetry = false;
 				// try {
-				try (Trx tx = graph.trx()) {
+				try (Tx tx = graph.tx()) {
 					addFriend(tx.getGraph(), p);
 					tx.success();
 					if (retry == 0) {
