@@ -77,6 +77,9 @@ public class TxTest extends AbstractOrientDBTest {
 						manipulatePerson(OrientDBTxFactory.getThreadLocalGraph(), person);
 						tx.complete(person);
 					}, rh -> {
+						if (rh.failed()) {
+							rh.cause().printStackTrace();
+						}
 						assertEquals(Person.class, rh.result().getClass());
 						latch.countDown();
 					});

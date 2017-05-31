@@ -8,7 +8,7 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 public class OrientDBTx extends AbstractTx {
 
 	public OrientDBTx(OrientGraphFactory factory, OrientDBTypeResolver typeResolver) {
-		FramedTransactionalGraph transaction = new DelegatingFramedTransactionalOrientGraph<>(factory.getTx(), typeResolver);
+		FramedTransactionalGraph transaction = new DelegatingFramedOrientGraph(factory.getTx(), typeResolver);
 		init(transaction);
 	}
 

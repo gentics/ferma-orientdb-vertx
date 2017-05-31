@@ -12,12 +12,10 @@ import org.junit.Test;
 import com.gentics.ferma.model.Group;
 import com.gentics.ferma.model.Person;
 import com.gentics.ferma.orientdb.DelegatingFramedOrientGraph;
-import com.gentics.ferma.orientdb.DelegatingFramedTransactionalOrientGraph;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.tinkerpop.blueprints.impls.orient.OrientEdgeType;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
-import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType;
 
@@ -41,14 +39,14 @@ public class OrientDBFermaIndexTest extends AbstractOrientDBTest {
 	 */
 	private void setupTypesAndIndices() {
 		try (Tx tx = graph.tx()) {
-			OrientGraphNoTx g = ((OrientGraphNoTx) ((DelegatingFramedOrientGraph) tx.getGraph()).getBaseGraph());
+			OrientGraph g = ((OrientGraph) ((DelegatingFramedOrientGraph) tx.getGraph()).getBaseGraph());
 			// g.setUseClassForEdgeLabel(true);
 			g.setUseLightweightEdges(false);
 			g.setUseVertexFieldsForEdgeLabels(false);
 		}
 
 		try (Tx tx = graph.tx()) {
-			OrientGraphNoTx g = ((OrientGraphNoTx) ((DelegatingFramedOrientGraph) tx.getGraph()).getBaseGraph());
+			OrientGraph g = ((OrientGraph) ((DelegatingFramedOrientGraph) tx.getGraph()).getBaseGraph());
 
 			OrientEdgeType e = g.createEdgeType("HAS_MEMBER");
 			e.createProperty("in", OType.LINK);
@@ -86,7 +84,7 @@ public class OrientDBFermaIndexTest extends AbstractOrientDBTest {
 		}
 
 		try (Tx tx = graph.tx()) {
-			OrientGraph graph = ((OrientGraph) ((DelegatingFramedTransactionalOrientGraph) tx.getGraph()).getBaseGraph());
+			OrientGraph graph = ((OrientGraph) ((DelegatingFramedOrientGraph) tx.getGraph()).getBaseGraph());
 			assertEquals(nMembers, g.getMembers().size());
 			long start = System.currentTimeMillis();
 			for (int i = 0; i < nChecks; i++) {

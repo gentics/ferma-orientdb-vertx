@@ -1,13 +1,8 @@
 package com.gentics.ferma;
 
 @FunctionalInterface
-public interface TxHandler<E> {
+public interface TxHandler<T> {
 
-	/**
-	 * Something has happened, so handle it.
-	 *
-	 * @param event
-	 *            the event to handle
-	 */
-	void handle(E event) throws Exception;
+	T handle(Tx tx) throws Exception;
+
 }

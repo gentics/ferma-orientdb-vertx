@@ -3,7 +3,6 @@ package com.gentics.ferma.orientdb.vertx;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import com.gentics.ferma.TxHandler;
 import com.gentics.ferma.Tx;
 import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
 import com.orientechnologies.orient.core.exception.OSchemaException;
@@ -30,7 +29,7 @@ public class OrientDBTxFactory extends com.gentics.ferma.orientdb.OrientDBTxFact
 	}
 
 	@Override
-	public <T> void asyncTx(TxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler) {
+	public <T> void asyncTx(AsyncTxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler) {
 		vertx.executeBlocking(bh -> {
 			tx(txHandler, rh -> {
 				if (rh.succeeded()) {
@@ -42,11 +41,9 @@ public class OrientDBTxFactory extends com.gentics.ferma.orientdb.OrientDBTxFact
 		}, false, resultHandler);
 		return;
 	}
-	
-	
 
 	@Override
-	public <T> Future<T> tx(TxHandler<Future<T>> txHandler) {
+	public <T> Future<T> tx(AsyncTxHandler<Future<T>> txHandler) {
 		Future<T> future = Future.future();
 		try (Tx tx = tx()) {
 			txHandler.handle(future);
@@ -57,9 +54,8 @@ public class OrientDBTxFactory extends com.gentics.ferma.orientdb.OrientDBTxFact
 		return future;
 	}
 
-
 	@Override
-	public <T> void tx(TxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler) {
+	public <T> void tx(AsyncTxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler) {
 		/**
 		 * OrientDB uses the MVCC pattern which requires a retry of the code that manipulates the graph in cases where for example an
 		 * {@link OConcurrentModificationException} is thrown.
