@@ -8,6 +8,24 @@ import com.syncleus.ferma.FramedTransactionalGraph;
 public interface Tx extends AutoCloseable {
 
 	/**
+	 * Thread local that is used to store references to the used graph.
+	 */
+	public static ThreadLocal<Tx> threadLocalGraph = new ThreadLocal<>();
+
+	public static void setActive(Tx tx) {
+		Tx.threadLocalGraph.set(tx);
+	}
+
+	/**
+	 * Return the current active graph. A transaction should be the only place where this threadlocal is updated.
+	 * 
+	 * @return
+	 */
+	public static Tx getActive() {
+		return Tx.threadLocalGraph.get();
+	}
+
+	/**
 	 * Mark the transaction as succeeded. The autoclosable will invoke a commit when completing.
 	 */
 	void success();

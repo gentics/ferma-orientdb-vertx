@@ -1,16 +1,33 @@
 package com.gentics.ferma;
 
-import com.gentics.ferma.Tx;
-import com.gentics.ferma.orientdb.OrientDBTxFactory;
 import com.syncleus.ferma.FramedTransactionalGraph;
 
 /**
  * An abstract class that can be used to implement vendor specific graph database Tx classes.
  */
-public abstract class AbstractTx extends AbstractTxBase<FramedTransactionalGraph>implements Tx {
+public abstract class AbstractTx<T extends FramedTransactionalGraph> implements Tx {
+
+	/**
+	 * Graph that is active within the scope of the autoclosable.
+	 */
+	private T currentGraph;
 
 	private boolean isSuccess = false;
 
+	/**
+	 * Initialize the transaction.
+	 * 
+	 * @param transactionalGraph
+	 */
+	protected void init(T transactionalGraph) {
+		// 1. Set the new transactional graph so that it can be accessed via Tx.getGraph()
+		setGraph(transactionalGraph);
+		// Handle graph multithreading issues by storing the old graph instance that was found in the threadlocal in a field.
+		// Overwrite the current active threadlocal graph with the given transactional graph. This way Ferma graph elements will utilize this instance.
+		Tx.setActive(this);
+	}
+
+	
 	@Override
 	public void success() {
 		isSuccess = true;
@@ -32,7 +49,7 @@ public abstract class AbstractTx extends AbstractTxBase<FramedTransactionalGraph
 
 	@Override
 	public void close() {
-		OrientDBTxFactory.setThreadLocalGraph(getOldGraph());
+		Tx.setActive(null);
 		if (isSuccess()) {
 			commit();
 		} else {
@@ -47,11 +64,11 @@ public abstract class AbstractTx extends AbstractTxBase<FramedTransactionalGraph
 	 * Invoke a commit on the database of this transaction.
 	 */
 	protected void commit() {
-		long start = System.currentTimeMillis();
+		// long start = System.currentTimeMillis();
 		if (getGraph() instanceof FramedTransactionalGraph) {
 			((FramedTransactionalGraph) getGraph()).commit();
 		}
-		long duration = System.currentTimeMillis() - start;
+		// long duration = System.currentTimeMillis() - start;
 	}
 
 	/**
@@ -61,6 +78,15 @@ public abstract class AbstractTx extends AbstractTxBase<FramedTransactionalGraph
 		if (getGraph() instanceof FramedTransactionalGraph) {
 			((FramedTransactionalGraph) getGraph()).rollback();
 		}
+	}
+
+
+	public FramedTransactionalGraph getGraph() {
+		return currentGraph;
+	}
+
+	protected void setGraph(T currentGraph) {
+		this.currentGraph = currentGraph;
 	}
 
 }

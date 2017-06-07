@@ -1,15 +1,27 @@
 package com.gentics.ferma.orientdb;
 
 import com.gentics.ferma.AbstractTx;
+import com.gentics.ferma.Tx;
 import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
 import com.syncleus.ferma.FramedTransactionalGraph;
+import com.syncleus.ferma.typeresolvers.TypeResolver;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
-public class OrientDBTx extends AbstractTx {
+public class OrientDBTx extends AbstractTx<FramedTransactionalGraph> {
 
-	public OrientDBTx(OrientGraphFactory factory, OrientDBTypeResolver typeResolver) {
-		FramedTransactionalGraph transaction = new DelegatingFramedOrientGraph(factory.getTx(), typeResolver);
-		init(transaction);
+	boolean isWrapped = false;
+
+	public OrientDBTx(OrientGraphFactory factory, TypeResolver typeResolver) {
+
+		// Check if an active transaction already exists.
+		Tx activeTx = Tx.getActive();
+		if (activeTx != null) {
+			isWrapped = true;
+			init(activeTx.getGraph());
+		} else {
+			DelegatingFramedOrientGraph transaction = new DelegatingFramedOrientGraph(factory.getTx(), typeResolver);
+			init(transaction);
+		}
 	}
 
 	@Override
@@ -23,9 +35,11 @@ public class OrientDBTx extends AbstractTx {
 		} catch (OConcurrentModificationException e) {
 			throw e;
 		} finally {
-			// Restore the old graph that was previously swapped with the current graph
-			getGraph().shutdown();
-			OrientDBTxFactory.setThreadLocalGraph(getOldGraph());
+			if (!isWrapped) {
+				// Restore the old graph that was previously swapped with the current graph
+				getGraph().shutdown();
+				Tx.setActive(null);
+			}
 		}
 	}
 }

@@ -3,8 +3,8 @@ package com.gentics.ferma.orientdb;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gentics.ferma.Tx;
 import com.syncleus.ferma.AbstractVertexFrame;
-import com.syncleus.ferma.DelegatingFramedGraph;
 import com.syncleus.ferma.FramedGraph;
 import com.syncleus.ferma.VertexFrame;
 import com.syncleus.ferma.typeresolvers.PolymorphicTypeResolver;
@@ -83,7 +83,7 @@ public class AbstractInterceptingVertexFrame extends AbstractVertexFrame {
 
 	@Override
 	public FramedGraph getGraph() {
-		return new DelegatingFramedGraph<>(OrientDBTxFactory.getThreadLocalGraph(), true, false);
+		return Tx.getActive().getGraph();
 	}
 
 	@Override

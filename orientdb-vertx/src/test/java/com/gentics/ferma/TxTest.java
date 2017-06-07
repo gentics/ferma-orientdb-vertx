@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 import com.gentics.ferma.model.Person;
-import com.gentics.ferma.orientdb.OrientDBTxFactory;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.logging.Logger;
@@ -74,7 +73,7 @@ public class TxTest extends AbstractOrientDBTest {
 						log.trace("Thread [" + threadNo + "] Starting");
 					}
 					graph.asyncTx(tx -> {
-						manipulatePerson(OrientDBTxFactory.getThreadLocalGraph(), person);
+						manipulatePerson(Tx.getActive().getGraph(), person);
 						tx.complete(person);
 					}, rh -> {
 						if (rh.failed()) {

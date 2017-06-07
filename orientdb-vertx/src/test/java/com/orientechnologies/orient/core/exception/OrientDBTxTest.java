@@ -17,7 +17,6 @@ import org.junit.Test;
 import com.gentics.ferma.AbstractOrientDBTest;
 import com.gentics.ferma.Tx;
 import com.gentics.ferma.model.Person;
-import com.gentics.ferma.orientdb.OrientDBTxFactory;
 
 import io.vertx.core.AsyncResult;
 
@@ -67,7 +66,7 @@ public class OrientDBTxTest extends AbstractOrientDBTest {
 				i.incrementAndGet();
 
 				System.out.println("Tx1");
-				addFriend(OrientDBTxFactory.getThreadLocalGraph(), p);
+				addFriend(Tx.getActive().getGraph(), p);
 				tx.complete();
 				if (i.get() <= 2) {
 					b.await();
@@ -82,7 +81,7 @@ public class OrientDBTxTest extends AbstractOrientDBTest {
 				i.incrementAndGet();
 
 				System.out.println("Tx2");
-				addFriend(OrientDBTxFactory.getThreadLocalGraph(), p);
+				addFriend(Tx.getActive().getGraph(), p);
 				tx.complete();
 				if (i.get() <= 2) {
 					b.await();

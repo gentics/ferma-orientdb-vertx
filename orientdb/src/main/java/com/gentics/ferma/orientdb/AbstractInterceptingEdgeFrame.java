@@ -1,15 +1,15 @@
 package com.gentics.ferma.orientdb;
 
-
+import com.gentics.ferma.Tx;
 import com.gentics.ferma.annotation.GraphElement;
 import com.syncleus.ferma.AbstractEdgeFrame;
-import com.syncleus.ferma.DelegatingFramedGraph;
 import com.syncleus.ferma.FramedGraph;
 import com.syncleus.ferma.typeresolvers.PolymorphicTypeResolver;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.util.wrappers.wrapped.WrappedEdge;
 import com.tinkerpop.blueprints.util.wrappers.wrapped.WrappedElement;
+
 @GraphElement
 public class AbstractInterceptingEdgeFrame extends AbstractEdgeFrame {
 
@@ -36,7 +36,7 @@ public class AbstractInterceptingEdgeFrame extends AbstractEdgeFrame {
 
 	@Override
 	public FramedGraph getGraph() {
-		return new DelegatingFramedGraph<>(OrientDBTxFactory.getThreadLocalGraph(), true, false);
+		return Tx.getActive().getGraph();
 	}
 
 	@Override
