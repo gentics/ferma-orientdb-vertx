@@ -15,8 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Test;
 
 import com.gentics.ferma.AbstractOrientDBTest;
-import com.gentics.ferma.Tx;
 import com.gentics.ferma.model.Person;
+import com.syncleus.ferma.tx.Tx;
 
 import io.vertx.core.AsyncResult;
 

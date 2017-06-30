@@ -1,9 +1,9 @@
-package com.gentics.ferma.orientdb;
+package com.syncleus.ferma.ext;
 
-import com.gentics.ferma.Tx;
-import com.gentics.ferma.annotation.GraphElement;
 import com.syncleus.ferma.AbstractEdgeFrame;
 import com.syncleus.ferma.FramedGraph;
+import com.syncleus.ferma.annotations.GraphElement;
+import com.syncleus.ferma.tx.Tx;
 import com.syncleus.ferma.typeresolvers.PolymorphicTypeResolver;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Element;

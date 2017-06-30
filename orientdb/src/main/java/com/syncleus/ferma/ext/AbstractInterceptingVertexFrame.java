@@ -1,12 +1,12 @@
-package com.gentics.ferma.orientdb;
+package com.syncleus.ferma.ext;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.gentics.ferma.Tx;
 import com.syncleus.ferma.AbstractVertexFrame;
 import com.syncleus.ferma.FramedGraph;
 import com.syncleus.ferma.VertexFrame;
+import com.syncleus.ferma.tx.Tx;
 import com.syncleus.ferma.typeresolvers.PolymorphicTypeResolver;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Vertex;

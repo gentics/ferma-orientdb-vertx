@@ -14,6 +14,7 @@ import com.gentics.ferma.model.Person;
 import com.gentics.ferma.orientdb.DelegatingFramedOrientGraph;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OType;
+import com.syncleus.ferma.tx.Tx;
 import com.tinkerpop.blueprints.impls.orient.OrientEdgeType;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;

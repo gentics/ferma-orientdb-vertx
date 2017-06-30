@@ -1,7 +1,7 @@
 package com.gentics.ferma.orientdb;
 
-import com.gentics.ferma.Tx;
-import com.gentics.ferma.TxFactory;
+import com.syncleus.ferma.tx.Tx;
+import com.syncleus.ferma.tx.TxFactory;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
 public class OrientDBTxFactory implements TxFactory {

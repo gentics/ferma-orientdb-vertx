@@ -8,9 +8,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Test;
 
-import com.gentics.ferma.Tx;
 import com.gentics.ferma.model.Person;
 import com.syncleus.ferma.VertexFrame;
+import com.syncleus.ferma.tx.Tx;
 
 public class OrientDBFermaMultithreadingTest extends AbstractOrientDBTest {
 

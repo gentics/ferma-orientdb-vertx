@@ -6,8 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.gentics.ferma.Tx;
 import com.gentics.ferma.model.Person;
+import com.syncleus.ferma.tx.Tx;
 
 public class OrientDBFermaMultithreadingReducedTest extends AbstractOrientDBTest {
 

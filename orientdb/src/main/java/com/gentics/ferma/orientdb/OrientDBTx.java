@@ -1,9 +1,9 @@
 package com.gentics.ferma.orientdb;
 
-import com.gentics.ferma.AbstractTx;
-import com.gentics.ferma.Tx;
 import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
 import com.syncleus.ferma.FramedTransactionalGraph;
+import com.syncleus.ferma.tx.AbstractTx;
+import com.syncleus.ferma.tx.Tx;
 import com.syncleus.ferma.typeresolvers.TypeResolver;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 

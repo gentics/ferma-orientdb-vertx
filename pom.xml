@@ -6,7 +6,7 @@
 	<version>0.1.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
-		<ferma.version>2.2.2</ferma.version>
+		<ferma.version>2.3.0-SNAPSHOT</ferma.version>
 		<orientdb.version>2.2.22</orientdb.version>
 		<vertx.version>3.4.2</vertx.version>
 	</properties>
@@ -25,7 +25,6 @@
 	</scm>
 
 	<modules>
-		<module>api</module>
 		<module>orientdb</module>
 		<module>orientdb-vertx</module>
 	</modules>

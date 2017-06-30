@@ -20,11 +20,6 @@
 			<artifactId>orientdb-graphdb</artifactId>
 			<version>${orientdb.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.gentics.ferma</groupId>
-			<version>${project.version}</version>
-			<artifactId>ferma-extensions-api</artifactId>
-		</dependency>
 	</dependencies>
 
 	<build>

@@ -2,8 +2,8 @@ package com.gentics.ferma.model;
 
 import java.util.List;
 
-import com.gentics.ferma.annotation.GraphElement;
-import com.gentics.ferma.orientdb.AbstractInterceptingVertexFrame;
+import com.syncleus.ferma.annotations.GraphElement;
+import com.syncleus.ferma.ext.AbstractInterceptingVertexFrame;
 
 @GraphElement
 public class Group extends AbstractInterceptingVertexFrame {

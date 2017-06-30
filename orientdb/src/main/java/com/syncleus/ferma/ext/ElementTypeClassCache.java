@@ -1,4 +1,4 @@
-package com.gentics.ferma.orientdb;
+package com.syncleus.ferma.ext;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.reflections.Reflections;
 
-import com.gentics.ferma.annotation.GraphElement;
+import com.syncleus.ferma.annotations.GraphElement;
 
 /**
  * Type cache which also provides resolving methods which cache the result.

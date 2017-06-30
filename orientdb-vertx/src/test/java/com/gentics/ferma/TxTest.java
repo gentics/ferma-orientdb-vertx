@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 import com.gentics.ferma.model.Person;
+import com.syncleus.ferma.tx.Tx;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.logging.Logger;

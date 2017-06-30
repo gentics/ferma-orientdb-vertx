@@ -2,10 +2,10 @@ package com.gentics.ferma;
 
 import org.junit.Test;
 
-import com.gentics.ferma.Tx;
 import com.gentics.ferma.model.IJob;
 import com.gentics.ferma.model.Job;
 import com.syncleus.ferma.VertexFrame;
+import com.syncleus.ferma.tx.Tx;
 
 public class FermaOrientDBTypeResolvingTest extends AbstractOrientDBTest {
 
