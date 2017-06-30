@@ -5,38 +5,37 @@ import com.gentics.*
 // Make the helpers aware of this jobs environment
 JobContext.set(this)
 
-GenericHelper.setParameterDefinitions([
-  new BooleanParameterDefinition('runTests',         true, "Whether to run the unit tests"),
-  new BooleanParameterDefinition('runRelease',       false, "Whether to run the release steps.")
+properties([
+        parameters([
+                booleanParam(name: 'runTests',            defaultValue: true,  description: "Whether to run the unit tests"),
+                booleanParam(name: 'runRelease',           defaultValue: false, description: "Whether to run the release steps.")
+        ])
 ])
 
-final def sshAgent             = "601b6ce9-37f7-439a-ac0b-8e368947d98d"
 final def gitCommitTag         = '[Jenkins | ' + env.JOB_BASE_NAME + ']';
 
-node('dockerSlave') {
-  sshagent([sshAgent]) {
-    final def mvnHome = tool 'M3'
+node('jenkins-slave') {
+  sshagent(["git"]) {
     def version = null
     def branchName = null
 
     stage('Checkout') {
-      sh "rm -rf *; rm -rf .git"
       checkout scm
     }
 
     stage('Preparation') {
       branchName = GitHelper.fetchCurrentBranchName()
       version = MavenHelper.getVersion()
-      if (Boolean.valueOf(runRelease)) {
+      if (Boolean.valueOf(params.runRelease)) {
         version = MavenHelper.transformSnapshotToReleaseVersion(version)
         MavenHelper.setVersion(version)
       }
     }
 
     stage("Test") {
-      if (Boolean.valueOf(runTests)) {
+      if (Boolean.valueOf(params.runTests)) {
         try {
-          sh "${mvnHome}/bin/mvn -B clean test -Dmaven.test.failure.ignore"
+          sh "mvn -B clean test -Dmaven.test.failure.ignore"
         } finally {
           junit  "**/target/surefire-reports/*.xml"
         }
@@ -46,11 +45,11 @@ node('dockerSlave') {
     }
 
     stage("Build") {
-      sh "${mvnHome}/bin/mvn -B clean deploy -DskipTests"
+      sh "mvn -B clean deploy -DskipTests"
     }
 
     stage('Post Build') {
-      if (Boolean.valueOf(runRelease)) {
+      if (Boolean.valueOf(params.runRelease)) {
         GitHelper.addCommit('.', gitCommitTag + ' Committing release changes (' + version + ')')
         GitHelper.addTag(version, 'Release of version ' + version)
         GitHelper.pushTag(version)
