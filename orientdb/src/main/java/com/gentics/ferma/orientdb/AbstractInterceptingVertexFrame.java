@@ -62,6 +62,12 @@ public class AbstractInterceptingVertexFrame extends AbstractVertexFrame {
 		return id;
 	}
 
+	/**
+	 * Set unique in-bound edges from the given vertex to the current vertex for all listed edge labels.
+	 * 
+	 * @param vertex
+	 * @param labels
+	 */
 	public void setLinkInTo(VertexFrame vertex, String... labels) {
 		// Unlink all edges between both objects with the given label
 		unlinkIn(vertex, labels);
@@ -69,6 +75,12 @@ public class AbstractInterceptingVertexFrame extends AbstractVertexFrame {
 		linkIn(vertex, labels);
 	}
 
+	/**
+	 * Set unique out-bound edges from the given vertex to the current vertex for all listed edge labels.
+	 * 
+	 * @param vertex
+	 * @param labels
+	 */
 	public void setLinkOutTo(VertexFrame vertex, String... labels) {
 		// Unlink all edges between both objects with the given label
 		unlinkOut(vertex, labels);
