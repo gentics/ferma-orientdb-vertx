@@ -13,9 +13,20 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.util.wrappers.wrapped.WrappedElement;
 import com.tinkerpop.blueprints.util.wrappers.wrapped.WrappedVertex;
 
+/**
+ * Abstract implementation of a orientdb specific ferma vertex frame. The internal orientdb vertex id is stored in order to reload the vertex if the vertex
+ * object was passed from one thread/transaction to another.
+ */
 public class AbstractInterceptingVertexFrame extends AbstractVertexFrame {
 
+	/**
+	 * Reference to the orientdb vertex id.
+	 */
 	private Object id;
+
+	/**
+	 * Thread specific reference to the underlying orientdb graph element.
+	 */
 	public ThreadLocal<Element> threadLocalElement = ThreadLocal.withInitial(() -> ((WrappedVertex) getGraph().getVertex(id)).getBaseElement());
 
 	@Override
@@ -83,6 +94,7 @@ public class AbstractInterceptingVertexFrame extends AbstractVertexFrame {
 
 	@Override
 	public FramedGraph getGraph() {
+		// Get the graph not by the element but instead by the currently active transaction.
 		return Tx.getActive().getGraph();
 	}
 

@@ -25,7 +25,7 @@ public interface TxVertxFactory {
 	 * @param resultHandler
 	 */
 	<T> void asyncTx(AsyncTxHandler<Future<T>> txHandler, Handler<AsyncResult<T>> resultHandler);
-	
+
 	/**
 	 * Execute the given handler within the scope of a transaction.
 	 * 

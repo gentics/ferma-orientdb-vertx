@@ -6,9 +6,9 @@
 	<version>0.1.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
-		<ferma.version>2.2.1</ferma.version>
-		<orientdb.version>2.2.20</orientdb.version>
-		<vertx.version>3.4.1</vertx.version>
+		<ferma.version>2.2.2</ferma.version>
+		<orientdb.version>2.2.22</orientdb.version>
+		<vertx.version>3.4.2</vertx.version>
 	</properties>
 
 	<parent>
