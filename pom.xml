@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.syncleus.ferma</groupId>
-	<artifactId>ferma-extensions</artifactId>
+	<groupId>com.gentics.ferma</groupId>
+	<artifactId>ferma-orientdb-vertx</artifactId>
 	<version>2.3.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>com.syncleus</groupId>
-		<artifactId>syncleus</artifactId>
-		<version>3</version>
+		<groupId>com.gentics</groupId>
+		<artifactId>maven-parent</artifactId>
+		<version>2.0.14</version>
 	</parent>
 
 	<properties>
-		<ferma.version>2.3.0-SNAPSHOT</ferma.version>
+		<ferma.orientdb.version>2.3.0-SNAPSHOT</ferma.orientdb.version>
 		<orientdb.version>2.2.24</orientdb.version>
 		<vertx.version>3.4.2</vertx.version>
 	</properties>
@@ -24,17 +24,26 @@
 		<tag>HEAD</tag>
 	</scm>
 
-	<modules>
-		<module>orientdb</module>
-		<module>orientdb-vertx</module>
-	</modules>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.syncleus.ferma</groupId>
-			<artifactId>ferma</artifactId>
-			<version>${ferma.version}</version>
+			<version>${ferma.orientdb.version}</version>
+			<artifactId>ferma-orientdb</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-core</artifactId>
+			<version>${vertx.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.syncleus.ferma</groupId>
+			<version>${ferma.orientdb.version}</version>
+			<artifactId>ferma-orientdb</artifactId>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
 
 		<!-- Test dependencies -->
 		<dependency>
