@@ -1,6 +1,6 @@
 package com.orientechnologies.orient.core.exception;
 
-import static com.gentics.ferma.util.TestUtils.run;
+import static com.syncleus.ferma.ext.orientdb.util.TestUtils.run;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -14,13 +14,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 
-import com.gentics.ferma.AbstractOrientDBTest;
-import com.gentics.ferma.model.Person;
+import com.syncleus.ferma.AbstractOrientDBVertexTest;
+import com.syncleus.ferma.ext.orientdb.model.Person;
 import com.syncleus.ferma.tx.Tx;
 
 import io.vertx.core.AsyncResult;
 
-public class OrientDBTxTest extends AbstractOrientDBTest {
+public class OrientDBTxTest extends AbstractOrientDBVertexTest {
 
 	private Person p;
 
