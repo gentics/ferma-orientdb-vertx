@@ -1,21 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.gentics.ferma</groupId>
+	<groupId>com.syncleus.ferma</groupId>
 	<artifactId>ferma-extensions</artifactId>
 	<version>2.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>com.syncleus</groupId>
+		<artifactId>syncleus</artifactId>
+		<version>3</version>
+	</parent>
+
 	<properties>
 		<ferma.version>2.3.0-SNAPSHOT</ferma.version>
 		<orientdb.version>2.2.24</orientdb.version>
 		<vertx.version>3.4.2</vertx.version>
 	</properties>
-
-	<parent>
-		<groupId>com.gentics</groupId>
-		<artifactId>maven-parent</artifactId>
-		<version>2.0.14</version>
-	</parent>
 
 	<scm>
 		<connection>scm:git:git@github.com:gentics/ferma-extensions.git</connection>
@@ -54,6 +54,14 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
