@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 
-import com.gentics.ferma.AbstractOrientDBVertexTest;
+import com.gentics.ferma.ext.orientdb.vertx.AbstractOrientDBVertexTest;
 import com.syncleus.ferma.ext.orientdb.model.Person;
 import com.syncleus.ferma.tx.Tx;
 

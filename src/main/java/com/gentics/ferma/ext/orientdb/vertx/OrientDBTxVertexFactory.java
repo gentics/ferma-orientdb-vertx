@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
 import com.orientechnologies.orient.core.exception.OSchemaException;
+import com.syncleus.ferma.ext.orientdb.impl.OrientTransactionFactoryImpl;
 import com.syncleus.ferma.tx.Tx;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
@@ -15,7 +16,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
-public class OrientDBTxVertexFactory extends com.syncleus.ferma.ext.orientdb.OrientDBTxFactory implements TxVertxFactory {
+public class OrientDBTxVertexFactory extends OrientTransactionFactoryImpl implements TxVertxFactory {
 
 	private static final Logger log = LoggerFactory.getLogger(OrientDBTxVertexFactory.class);
 

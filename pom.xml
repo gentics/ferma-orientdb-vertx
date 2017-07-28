@@ -12,7 +12,7 @@
 	</parent>
 
 	<properties>
-		<ferma.orientdb.version>2.3.0-SNAPSHOT</ferma.orientdb.version>
+		<ferma.orientdb.version>2.3.1-SNAPSHOT</ferma.orientdb.version>
 		<orientdb.version>2.2.24</orientdb.version>
 		<vertx.version>3.4.2</vertx.version>
 	</properties>

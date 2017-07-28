@@ -1,4 +1,4 @@
-package com.gentics.ferma;
+package com.gentics.ferma.ext.orientdb.vertx;
 
 import static com.syncleus.ferma.ext.orientdb.util.TestUtils.failingLatch;
 import static com.syncleus.ferma.ext.orientdb.util.TestUtils.run;
@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
+import com.syncleus.ferma.FramedGraph;
 import com.syncleus.ferma.ext.orientdb.model.Person;
 import com.syncleus.ferma.tx.Tx;
 
