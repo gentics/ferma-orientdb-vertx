@@ -3,11 +3,12 @@ package com.gentics.ferma.ext.orientdb.vertx;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.tinkerpop.gremlin.orientdb.OrientGraphFactory;
+
 import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
 import com.orientechnologies.orient.core.exception.OSchemaException;
 import com.syncleus.ferma.ext.orientdb.impl.OrientTransactionFactoryImpl;
 import com.syncleus.ferma.tx.Tx;
-import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;

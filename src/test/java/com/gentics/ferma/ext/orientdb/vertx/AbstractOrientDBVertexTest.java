@@ -1,11 +1,10 @@
 package com.gentics.ferma.ext.orientdb.vertx;
 
+import org.apache.tinkerpop.gremlin.orientdb.OrientGraphFactory;
 import org.junit.Before;
 
-import com.gentics.ferma.ext.orientdb.vertx.OrientDBTxVertexFactory;
 import com.syncleus.ferma.FramedGraph;
 import com.syncleus.ferma.ext.orientdb.model.Person;
-import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
 import io.vertx.core.Vertx;
 

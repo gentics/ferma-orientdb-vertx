@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.gentics.ferma</groupId>
 	<artifactId>ferma-orientdb-vertx</artifactId>
-	<version>2.3.0-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -13,9 +13,9 @@
 	</parent>
 
 	<properties>
-		<ferma.orientdb.version>2.3.1-SNAPSHOT</ferma.orientdb.version>
-		<orientdb.version>2.2.25</orientdb.version>
-		<vertx.version>3.4.2</vertx.version>
+		<ferma.orientdb.version>3.0.0-SNAPSHOT</ferma.orientdb.version>
+		<orientdb.version>3.0.0m2</orientdb.version>
+		<vertx.version>3.5.0.Beta1</vertx.version>
 	</properties>
 
 	<scm>

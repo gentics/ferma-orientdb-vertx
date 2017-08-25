@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import com.syncleus.ferma.FramedGraph;
 import com.syncleus.ferma.ext.orientdb.model.Person;
 import com.syncleus.ferma.tx.Tx;
 
@@ -193,7 +192,7 @@ public class TxTest extends AbstractOrientDBVertexTest {
 		}, rh -> {
 			cf.complete(rh.cause());
 		});
-		assertEquals("error", cf.get().getMessage());
+		assertEquals("error", cf.get(1, TimeUnit.SECONDS).getMessage());
 		throw cf.get();
 	}
 
