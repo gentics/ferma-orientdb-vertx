@@ -67,7 +67,7 @@ public class OrientDBTxTest extends AbstractOrientDBVertexTest {
 				addFriend(Tx.getActive().getGraph(), p);
 				tx.complete();
 				if (i.get() <= 2) {
-					b.await();
+					b.await(1, TimeUnit.SECONDS);
 				}
 			}, rh -> {
 				System.out.println("Completed");
@@ -82,7 +82,7 @@ public class OrientDBTxTest extends AbstractOrientDBVertexTest {
 				addFriend(Tx.getActive().getGraph(), p);
 				tx.complete();
 				if (i.get() <= 2) {
-					b.await();
+					b.await(1, TimeUnit.SECONDS);
 				}
 			}, rh -> {
 				System.out.println("Completed");

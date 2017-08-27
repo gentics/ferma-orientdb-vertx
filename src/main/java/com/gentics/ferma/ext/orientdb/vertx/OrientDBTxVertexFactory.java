@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.tinkerpop.gremlin.orientdb.OrientGraphFactory;
 
-import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
+import com.orientechnologies.common.concur.ONeedRetryException;
 import com.orientechnologies.orient.core.exception.OSchemaException;
 import com.syncleus.ferma.ext.orientdb.impl.OrientTransactionFactoryImpl;
 import com.syncleus.ferma.tx.Tx;
@@ -84,7 +84,7 @@ public class OrientDBTxVertexFactory extends OrientTransactionFactoryImpl implem
 				// TODO maybe we should invoke a metadata getschema reload?
 				// factory.getTx().getRawGraph().getMetadata().getSchema().reload();
 				// Database.getThreadLocalGraph().getMetadata().getSchema().reload();
-			} catch (OConcurrentModificationException e) {
+			} catch (ONeedRetryException e) {
 				if (log.isTraceEnabled()) {
 					log.trace("Error while handling transaction. Retrying " + retry, e);
 				}
