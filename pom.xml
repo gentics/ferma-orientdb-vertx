@@ -14,8 +14,8 @@
 
 	<properties>
 		<ferma.orientdb.version>2.3.1-SNAPSHOT</ferma.orientdb.version>
-		<orientdb.version>2.2.25</orientdb.version>
-		<vertx.version>3.4.2</vertx.version>
+		<orientdb.version>2.2.37</orientdb.version>
+		<vertx.version>3.5.4</vertx.version>
 	</properties>
 
 	<scm>
